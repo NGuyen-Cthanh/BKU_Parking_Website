@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>BKU Parking | Settings</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="scripts/i18n.js?v=20260424-06" defer></script>
+  <script src="scripts/site.js?v=20260424-06" defer></script>
+</head>
+<body class="settings-body" data-page="settings-home">
+  <div class="dashboard-shell">
+    <aside class="sidebar">
+      <a class="brand sidebar-brand" href="index.html" aria-label="BKU Parking home">
+        <img class="brand-mark" src="./assets/images/logo.png" alt="BKU logo">
+        <span class="brand-text">BKU Parking</span>
+      </a>
+
+      <div class="sidebar-avatar">
+        <span>J</span>
+      </div>
+
+      <label class="sidebar-search">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="6.5"></circle>
+          <path d="m16 16 4 4"></path>
+        </svg>
+        <input type="search" placeholder="Search for...">
+      </label>
+
+      <nav class="sidebar-nav" aria-label="Dashboard navigation">
+        <a href="settings-home.html" class="nav-item is-active">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5V20H4Z"></path></svg>
+          </span>
+          <span>Home</span>
+        </a>
+        <a href="settings-bill.html" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16l-3-2-3 2-3-2-3 2Z"></path></svg>
+          </span>
+          <span>Billing</span>
+        </a>
+        <a href="settings-home.html" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.8 14.8 5l3.1-.5.9 3 2.4 2-1.8 2.6.3 3.1-3 .9-1.9 2.4-2.8-1.2-2.8 1.2-1.9-2.4-3-.9.3-3.1L2.8 9.5l2.4-2 .9-3 3.1.5Z"></path></svg>
+          </span>
+          <span>Setting</span>
+          <span class="nav-badge">99+</span>
+          <span class="nav-chevron">⌄</span>
+        </a>
+      </nav>
+    </aside>
+
+    <main class="dashboard-content">
+      <section class="dashboard-header">
+        <h1>Settings</h1>
+      </section>
+
+      <section class="summary-grid">
+        <article class="summary-card">
+          <span>This semester fee (until now)</span>
+          <strong id="billing-semester-total">--</strong>
+        </article>
+        <article class="summary-card">
+          <span>Last semester bill fee</span>
+          <strong id="billing-last-semester-total">--</strong>
+        </article>
+        <article class="summary-card">
+          <span>Active time</span>
+          <strong id="billing-active-time">--</strong>
+        </article>
+      </section>
+
+      <section class="settings-grid">
+        <div class="panel panel-lg">
+          <div class="panel-header">
+            <h2>Profile Photo</h2>
+          </div>
+          <div class="profile-card">
+            <div class="profile-avatar-large" id="avatar-preview">J</div>
+            <div class="profile-actions">
+              <label class="outline-button upload-button">
+                <input type="file" id="avatar-upload" accept="image/*" hidden>
+                Upload Photo
+              </label>
+              <button class="text-button" type="button" id="remove-photo">remove</button>
+            </div>
+            <div class="profile-rules">
+              <h3>Image requirements:</h3>
+              <ol>
+                <li>Min. 400 x 400px</li>
+                <li>Max. 2MB</li>
+                <li>Your face or company logo</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        <aside class="panel login-state-panel">
+          <div class="panel-header">
+            <h2>Login state</h2>
+          </div>
+          <div class="state-legend">
+            <span><i class="dot dot-active"></i>Active</span>
+            <span><i class="dot dot-inactive"></i>Unactive</span>
+          </div>
+          <div class="gauge" id="login-state-gauge" style="--value:0">
+            <div class="gauge-inner">
+              <strong id="login-state-value">0%</strong>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="panel panel-form">
+        <div class="panel-header">
+          <h2>User Details</h2>
+        </div>
+        <form class="details-form" id="profile-form">
+          <label class="field">
+            <span>First Name</span>
+            <input type="text" name="firstName" placeholder="First Name" value="Thanh">
+          </label>
+          <label class="field">
+            <span>Last Name</span>
+            <input type="text" name="lastName" placeholder="Your Last Name" value="Nguyen Kong Thenh">
+          </label>
+          <label class="field field-span-2">
+            <span>Email Address</span>
+            <input type="email" name="email" placeholder="Your Email" value="thanh.nguyenkongthenh@hcmut.edu.vn">
+          </label>
+          <label class="field field-span-2">
+            <span>Password</span>
+            <span class="password-field">
+              <input type="password" name="password" placeholder="Your Password" value="123456789">
+              <button class="icon-button muted-button" type="button" data-toggle-profile-password aria-label="Show password">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"></path>
+                  <circle cx="12" cy="12" r="2.8"></circle>
+                </svg>
+              </button>
+            </span>
+          </label>
+          <label class="field field-span-2">
+            <span>Parking Zone</span>
+            <select name="zone">
+              <option selected>Gate 1</option>
+              <option>Gate 2</option>
+              <option>Gate 3</option>
+            </select>
+          </label>
+          <div class="form-actions field-span-2">
+            <button class="submit-button short-button" type="submit">Save Profile</button>
+            <button class="outline-button logout-button short-button" id="logout-button" type="button">Log Out</button>
+          </div>
+        </form>
+      </section>
+
+      <div class="alert-banner" id="save-banner" hidden>
+        <span class="alert-check">✓</span>
+        <strong>Successfully Saved.</strong>
+        <span>Your profile settings have been saved.</span>
+        <button class="icon-button muted-button" type="button" id="dismiss-banner" aria-label="Dismiss">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 18 18M18 6 6 18"></path></svg>
+        </button>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

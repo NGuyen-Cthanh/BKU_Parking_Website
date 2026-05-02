@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>BKU Parking - Park Smarter</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="stylesheet" href="styles/main.css">
+  <style data-purpose="layout-styles">
+    .hero-text-block {
+      transform: translateY(-140px);
+    }
+
+    .hero-text-style {
+      color: #ffffff;
+      text-shadow: 0 16px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    @media (max-width: 768px) {
+      .hero-text-block {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body class="font-sans text-gray-900 bg-white" data-page="landing">
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm h-16">
+    <div class="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <img alt="BKU Logo" class="w-10 h-10 object-contain" src="./assets/images/logo.png">
+        <span class="text-xl font-bold text-gray-800">BKU Parking</span>
+      </div>
+
+      <nav class="hidden md:flex items-center space-x-8 font-medium">
+        <a class="hover:text-blue-700 transition-colors" href="./index.html">Home</a>
+        <a class="hover:text-blue-700 transition-colors" href="#landscape-map">Map</a>
+        <a class="hover:text-blue-700 transition-colors" href="./BKPay.html">BKPay</a>
+      </nav>
+
+      <div class="flex items-center space-x-6">
+        <button class="text-gray-600 hover:text-blue-700" type="button" aria-label="Search">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+        </button>
+
+        <div class="hidden items-center space-x-4" id="auth-nav-actions">
+          <div class="h-6 w-px bg-gray-300"></div>
+          <a aria-label="Open account settings" class="h-8 w-8 overflow-hidden rounded-full hover:opacity-90 transition-opacity" href="./settings-home.html">
+            <img alt="Account avatar" class="h-full w-full object-cover" id="auth-avatar" src="./assets/images/thanh-avatar.svg">
+          </a>
+          <span class="text-sm font-medium text-gray-800" id="auth-label">Thanh</span>
+        </div>
+
+        <div class="flex items-center space-x-6" id="default-nav-actions">
+          <div class="h-6 w-px bg-gray-300"></div>
+          <a class="flex items-center gap-1 text-gray-700 hover:text-blue-700" href="./login.html">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            </svg>
+            <span>login</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="relative h-[600px] mt-16 overflow-hidden">
+    <img alt="Campus Illustration" class="absolute inset-0 w-full h-full object-cover" src="./assets/images/BKU drawing_1.png">
+    <div class="absolute inset-0 bg-black/5 flex flex-col justify-center px-12 md:px-24">
+      <div class="max-w-xl hero-text-block">
+        <h1 class="text-[54px] font-black mb-6 hero-text-style">BKU Parking</h1>
+        <p class="text-[18px] leading-relaxed mb-1 hero-text-style">Park smarter, not harder.</p>
+        <p class="text-[18px] hero-text-style">See each zone live, count slots top-to-bottom, and choose a free spot faster.</p>
+      </div>
+
+      <div class="absolute bottom-8 left-12 flex items-center gap-2 text-sm text-gray-700 bg-white/50 px-2 py-1 rounded" data-purpose="language-selector" data-language-layout="landing">
+        <span>English (United States)</span>
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <main class="map-section" id="landscape-map">
+    <div class="section-intro">
+      <h2>Landscape Map</h2>
+      <p>Please observe the real-time parking map to find a parking spot faster and see each zone numbered from top to bottom.</p>
+    </div>
+
+    <div class="map-shell">
+      <div class="lot-summary">
+        <div>
+          <h3>Gate 1 Parking</h3>
+          <p class="lot-meta">
+            <span><strong id="parking-available-count">--</strong>/<strong id="parking-total-count">--</strong> <span id="parking-available-label">spots available</span></span>
+            <!-- <span class="meta-dot"></span> -->
+            <!-- <span>Zone numbers reset from 01 in each zone</span> -->
+          </p>
+        </div>
+      </div>
+
+      <div class="parking-overview">
+        <div aria-live="polite" class="parking-lower" id="parking-lower"></div>
+        <p class="parking-status-note" id="parking-status-message">Loading live Excel data...</p>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item">
+          <span class="legend-swatch legend-zone">A</span>
+          <span>Zone</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-swatch legend-available">01</span>
+          <span>Available (0)</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-swatch legend-selected">01</span>
+          <span>Selected</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-swatch legend-unavailable">01</span>
+          <span>Unavailable (1)</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-[#f0f4f8] py-16 px-6">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-3 mb-6">
+          <img alt="BKU Logo" class="w-10 h-10 object-contain" src="./assets/images/logo.png">
+          <h4 class="text-2xl font-bold text-gray-800">BKU Parking</h4>
+        </div>
+        <p class="text-gray-600 text-sm max-w-sm mb-8 leading-relaxed">
+          Park smarter, save time on campus, and keep your parking status visible from one place.
+        </p>
+        <p class="text-xs text-gray-500">
+          Copyright 2026 TA NBINHTAINANGTEAM<br>
+          All rights reserved.
+        </p>
+      </div>
+
+      <div>
+        <h5 class="text-lg font-bold text-gray-800 mb-6">Technician</h5>
+        <div class="space-y-4 text-sm">
+          <div>
+            <p class="text-gray-500 mb-1">Email:</p>
+            <p class="text-gray-800 font-medium">mailcanhan@hcmut.edu.vn</p>
+          </div>
+          <div>
+            <p class="text-gray-500 mb-1">Tel:</p>
+            <p class="text-gray-800 font-medium">(84) 68.6868.6868</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h5 class="text-lg font-bold text-gray-800 mb-6">Help</h5>
+        <ul class="space-y-4 text-sm">
+          <li><a class="text-gray-800 hover:text-blue-700 transition-colors font-medium" href="./settings-home.html">Contact Us</a></li>
+          <li><a class="text-gray-800 hover:text-blue-700 transition-colors font-medium" href="./settings-bill.html">Privacy Policy</a></li>
+          <li><a class="text-gray-800 hover:text-blue-700 transition-colors font-medium" href="./login.html">Terms of service</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const landingNavModeKey = "bkuParkingNavMode";
+      const landingProfileKey = "bkuParkingProfile";
+      const defaultNavActions = document.querySelector("#default-nav-actions");
+      const authNavActions = document.querySelector("#auth-nav-actions");
+      const authAvatar = document.querySelector("#auth-avatar");
+      const authLabel = document.querySelector("#auth-label");
+      const authState = sessionStorage.getItem(landingNavModeKey);
+
+      function showActions(target) {
+        defaultNavActions?.classList.add("hidden");
+        authNavActions?.classList.add("hidden");
+        defaultNavActions?.classList.remove("flex");
+        authNavActions?.classList.remove("flex");
+        target?.classList.remove("hidden");
+        target?.classList.add("flex");
+      }
+
+      if (authState === "authenticated") {
+        const savedProfile = JSON.parse(localStorage.getItem(landingProfileKey) || "{}");
+        if (savedProfile.avatar && authAvatar) {
+          authAvatar.src = savedProfile.avatar;
+        }
+        if (savedProfile.firstName && authLabel) {
+          authLabel.textContent = savedProfile.firstName;
+        }
+        showActions(authNavActions);
+      } else {
+        showActions(defaultNavActions);
+      }
+    })();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script defer src="./scripts/i18n.js?v=20260424-06"></script>
+  <script defer src="./scripts/site.js?v=20260424-06"></script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Thank You - BKU Parking</title>
+<!-- Tailwind CSS v3 CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style data-purpose="custom-fonts">
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+<style data-purpose="layout-colors">
+    .text-primary-blue { color: #1E40AF; }
+    .bg-light-gray { background-color: #F8F9FA; }
+    .border-primary-blue { border-color: #3B82F6; }
+    .text-brand-blue { color: #2563EB; }
+  </style>
+</head>
+<body class="bg-white flex flex-col min-h-screen">
+<!-- BEGIN: MainHeader -->
+<header class="border-b border-gray-100 py-4 px-8 sticky top-0 bg-white z-50">
+<div class="max-w-7xl mx-auto flex items-center justify-between">
+<!-- Logo Section -->
+<div class="flex items-center gap-2" data-purpose="brand-logo">
+<img alt="BKU Parking Logo" class="h-10 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ADBb0uhoyW-WDEpvwCFYh2OmEDfdulT8XBbGBBDDNefPMTKZwRsdXvrQfC3GCqJZvAOTGtuOlwriheY36cYX3FjoU5111NaQO4uucUyTbnxD1BFSEhnLBf8jTvXwl7So-LPhS9ettqAwpZEw3wBl0ijDAXBhNjEwPVrfahg6Ted3ySTGzhqCRcFEVLHqD7HT_XX4gvHBQA_RSO8JogF6Trc8LFpJum9zYwTiXxE-rvgYC3gqkNB2haISdeuefsjDS-iwXnQjbBdvguBFAQ" style="clip-path: inset(0% 80% 0% 0%); transform: scale(3.5); transform-origin: left center;"/>
+<span class="font-bold text-xl tracking-tight ml-2">BKU Parking</span>
+</div>
+<!-- Navigation Links -->
+<nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-700">
+<a class="hover:text-blue-600" href="./index.html">Home</a>
+<a class="hover:text-blue-600" href="./index.html#landscape-map">Map</a>
+<a class="hover:text-blue-600" href="./BKPay.html">BKPay</a>
+</nav>
+<!-- Search and Auth -->
+<div class="flex items-center gap-6">
+<button aria-label="Search" class="text-gray-500 hover:text-gray-700">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<div class="h-6 w-px bg-gray-300"></div>
+<div class="flex items-center gap-4 text-sm font-medium">
+<a class="flex items-center gap-1 hover:text-blue-600" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+            login
+          </a>
+<a class="flex items-center gap-1 text-blue-500 hover:text-blue-700" href="#">
+<svg class="h-5 w-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+            Sign Up
+          </a>
+</div>
+</div>
+</div>
+</header>
+<!-- END: MainHeader -->
+<!-- BEGIN: MainContent -->
+<main class="flex-grow flex flex-col items-center justify-center px-4 py-20 text-center" data-purpose="success-message-container">
+<!-- Success Icon -->
+<div class="mb-8" data-purpose="status-icon">
+<svg class="w-24 h-24 text-gray-300 mx-auto" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<!-- Confirmation Text -->
+<h1 class="text-5xl font-bold text-gray-900 mb-2">Thank You</h1>
+<h2 class="text-4xl font-bold text-gray-800 mb-8">Your Order is Processing</h2>
+<!-- Description -->
+<p class="max-w-3xl text-gray-600 leading-relaxed text-lg mb-12">
+      Rhoncus morbi et augue nec, in id ullamcorper at sit. Condimentum sit nunc in eros scelerisque sed. Commodo in viverra nunc, ullamcorper ut. Non, amet, aliquet scelerisque nullam sagittis, pulvinar. Fermentum scelerisque sit consectetur hac mi. Mollis leo eleifend ultricies purus iaculis.
+    </p>
+<!-- Navigation Button -->
+<a class="inline-block border-2 border-blue-500 text-blue-500 px-12 py-3 text-lg font-medium hover:bg-blue-50 transition-colors" data-purpose="home-button" href="./index.html">
+      Home Page
+    </a>
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: Footer -->
+<footer class="bg-gray-50 pt-16 pb-12 px-8 border-t border-gray-100" data-purpose="main-footer">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-12">
+<!-- Company Info Column -->
+<div class="max-w-md">
+<div class="flex items-center gap-2 mb-6" data-purpose="footer-logo">
+<img alt="BKU Parking Logo" class="h-8 w-auto" src="https://lh3.googleusercontent.com/aida/ADBb0uhoyW-WDEpvwCFYh2OmEDfdulT8XBbGBBDDNefPMTKZwRsdXvrQfC3GCqJZvAOTGtuOlwriheY36cYX3FjoU5111NaQO4uucUyTbnxD1BFSEhnLBf8jTvXwl7So-LPhS9ettqAwpZEw3wBl0ijDAXBhNjEwPVrfahg6Ted3ySTGzhqCRcFEVLHqD7HT_XX4gvHBQA_RSO8JogF6Trc8LFpJum9zYwTiXxE-rvgYC3gqkNB2haISdeuefsjDS-iwXnQjbBdvguBFAQ" style="clip-path: inset(0% 80% 0% 0%); transform: scale(3.5); transform-origin: left center;"/>
+<span class="font-bold text-2xl ml-2">BKU Parking</span>
+</div>
+<p class="text-sm text-gray-700 leading-relaxed mb-8">
+          Quý Thầy/Cô chưa có tài khoản (hoặc quên mật khẩu) nhà trường vui lòng liên hệ Trung tâm Dữ liệu &amp; Công nghệ Thông tin, nhà A5 - phòng 107 để được hỗ trợ.
+        </p>
+<p class="text-xs text-gray-500">
+          Copyright © 2026 TANBINHTAINANGTEAM<br/>
+          All right reserved.
+        </p>
+</div>
+<!-- Links Columns -->
+<div class="flex flex-col md:flex-row gap-16 md:gap-32">
+<!-- Technician Column -->
+<div>
+<h3 class="font-bold text-gray-900 mb-6">Technician</h3>
+<div class="space-y-4">
+<div>
+<p class="text-sm font-semibold text-gray-900">Email:</p>
+<a class="text-sm text-gray-700 hover:text-blue-600" href="mailto:mailcanhan@hcmut.edu.vn">mailcanhan@hcmut.edu.vn</a>
+</div>
+<div>
+<p class="text-sm font-semibold text-gray-900">Tel:</p>
+<p class="text-sm text-gray-700">(84) 68.6868.6868</p>
+</div>
+</div>
+</div>
+<!-- Help Column -->
+<div>
+<h3 class="font-bold text-gray-900 mb-6">Help</h3>
+<ul class="space-y-4 text-sm text-gray-700">
+<li><a class="hover:text-blue-600" href="#">Contact Us</a></li>
+<li><a class="hover:text-blue-600" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-blue-600" href="#">Terms of service</a></li>
+</ul>
+</div>
+</div>
+</div>
+</footer>
+<!-- END: Footer -->
+  <script defer src="./scripts/i18n.js?v=20260424-06"></script>
+</body></html>
