@@ -1,120 +1,159 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scan QR Code - BKU Parking</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
-<html lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Scan QR Code - BKU Parking</title>
-<!-- Tailwind CSS v3 CDN with plugins -->
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<style data-purpose="typography">
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     body {
-      font-family: 'Inter', sans-serif;
-    }
-  </style>
-<style data-purpose="layout-adjustments">
-    /* Custom spacing for the main container to match the screenshot aspect ratio */
-    .qr-container {
-      min-height: calc(100vh - 80px - 300px); /* Adjusting for header and footer */
+      font-family: "Inter", sans-serif;
     }
   </style>
 </head>
-<body class="bg-white text-gray-900">
-<!-- BEGIN: MainHeader -->
-<header class="w-full border-b border-gray-100 px-8 py-4 bg-white" data-purpose="site-navigation">
-<div class="max-w-7xl mx-auto flex items-center justify-between">
-<!-- Logo and Brand -->
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 flex items-center justify-center">
-<img alt="BKU Logo" class="w-full h-full object-contain" src="./assets/images/logo.png"/>
-</div>
-<span class="text-2xl font-bold tracking-tight">BKU Parking</span>
-</div>
-<!-- Navigation Links -->
-<nav class="flex items-center gap-8">
-<a class="text-sm font-medium hover:text-blue-600 transition-colors" href="./index.html">Home</a>
-<a class="text-sm font-medium hover:text-blue-600 transition-colors" href="./index.html#landscape-map">Map</a>
-<a class="text-sm font-medium hover:text-blue-600 transition-colors" href="./BKPay.html">BKPay</a>
-</nav>
-<!-- User Actions -->
-<div class="flex items-center gap-6">
-<!-- Search Icon -->
-<button aria-label="Search" class="text-gray-500 hover:text-gray-700">
-<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-</button>
-<!-- Separator -->
-<div class="h-6 w-px bg-gray-300"></div>
-<!-- User Profile -->
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-full bg-gray-400"></div>
-<span class="text-sm font-medium">Thanh</span>
-</div>
-</div>
-</div>
-</header>
-<!-- END: MainHeader -->
-<!-- BEGIN: MainContent -->
-<main class="qr-container flex flex-col items-center justify-center py-20 px-4" data-purpose="qr-scan-section">
-<h1 class="text-5xl font-bold mb-16 text-center">Scan the QR code</h1>
-<!-- QR Code Display -->
-<div class="mb-16" data-purpose="qr-display">
-<img alt="QR Code for Scanning" class="w-[450px] h-auto mx-auto shadow-sm" src="./assets/images/QR code.png"/>
-</div>
-<!-- Call to Action -->
-<div class="w-full flex justify-center">
-<a class="px-12 py-3 border-2 border-blue-500 text-blue-500 font-semibold text-lg hover:bg-blue-50 transition-colors rounded-md inline-flex items-center justify-center" data-purpose="action-button" href="./settings-bill.html">
+<body class="bg-white text-gray-900" data-page="bkpay">
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm h-16">
+    <div class="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <img alt="BKU Logo" class="w-10 h-10 object-contain" src="./assets/images/logo.png">
+        <span class="text-xl font-bold text-gray-800">BKU Parking</span>
+      </div>
+
+      <nav class="hidden md:flex items-center space-x-8 font-medium">
+        <a class="hover:text-blue-700 transition-colors" href="./index.html">Home</a>
+        <a class="hover:text-blue-700 transition-colors" href="./index.html#landscape-map">Map</a>
+        <a class="hover:text-blue-700 transition-colors" href="./BKPay_Bill.html">BKPay</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button class="text-gray-600 hover:text-blue-700" type="button" aria-label="Search">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+        </button>
+
+        <div class="h-5 w-px bg-gray-300"></div>
+
+        <div class="hidden items-center gap-3" id="auth-nav-actions">
+          <a aria-label="Open account settings" class="h-8 w-8 overflow-hidden rounded-full hover:opacity-90 transition-opacity border border-gray-200" href="./settings-home.html">
+            <img alt="Account avatar" class="h-full w-full object-cover" id="auth-avatar" src="./assets/images/thanh-avatar.svg">
+          </a>
+          <span class="text-sm font-medium text-gray-800" id="auth-label">Thanh</span>
+        </div>
+
+        <div class="flex items-center gap-2" id="default-nav-actions">
+          <a class="flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors" href="./login.html">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+            <span>Login</span>
+          </a>
+          <a class="flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-700 px-3 py-1.5 rounded-lg border border-blue-200 hover:border-blue-400 hover:bg-blue-50 transition-colors" href="./login.html">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+            <span>Sign Up</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="min-h-[calc(100vh-380px)] flex flex-col items-center justify-center py-20 px-4 mt-16" data-purpose="qr-scan-section">
+    <h1 class="text-5xl font-bold mb-16 text-center">Scan the QR code</h1>
+    <div class="mb-16" data-purpose="qr-display">
+      <img alt="QR Code for Scanning" class="w-[450px] h-auto mx-auto shadow-sm" src="./assets/images/QR code.png">
+    </div>
+    <div class="w-full flex justify-center gap-4">
+      <a class="px-12 py-3 border-2 border-blue-500 text-blue-500 font-semibold text-lg hover:bg-blue-50 transition-colors rounded-md inline-flex items-center justify-center" data-purpose="action-button" href="./settings-bill.html">
         Check your bill
       </a>
-</div>
-</main>
-<!-- END: MainContent -->
-<!-- BEGIN: MainFooter -->
-<footer class="bg-gray-50 border-t border-gray-100 py-20 px-8" data-purpose="footer-info">
-<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-12">
-<!-- Brand and Disclaimer -->
-<div class="max-w-md">
-<div class="flex items-center gap-3 mb-8">
-<div class="w-8 h-8">
-<img alt="BKU Logo Footer" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDASpKsdWH-O73iD4Jm4BplA46v3m6Ph8cyC4NMgabmmsJ_mAYt0mFEO4FcuZSjbGfH9pTow5Qh2UNIx8VWF8xZAqUCkLPLCXIf0rTTScWKLLpdDafq251H6FdPVhFk_rLyQ9qkPbTZtk8PRSWtPOR4R4Bb7uwdCS6SVRq2gxODj37dgKl1pk4kgdYNpEYOQkfh9IMbgolDjjKAffmxPPcJT8Ln_GoXUzsUbqIIHQG3AtSwwqJjnnlGwNqQUQoaSJEh03SkKtOXrokT"/>
-</div>
-<span class="text-xl font-bold">BKU Parking</span>
-</div>
-<p class="text-sm text-gray-700 leading-relaxed mb-8">
-          Quý Thầy/Cô chưa có tài khoản (hoặc quên mật khẩu) nhà trường vui lòng liên hệ Trung tâm Dữ liệu &amp; Công nghệ Thông tin, nhà A5 - phòng 107 để được hỗ trợ.
+      <a class="px-12 py-3 bg-blue-500 text-white font-semibold text-lg hover:bg-blue-600 transition-colors rounded-md inline-flex items-center justify-center" href="./Thank_you.html">
+        Done
+      </a>
+    </div>
+  </main>
+
+  <footer class="bg-gray-50 border-t border-gray-100 py-20 px-8" data-purpose="footer-info">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-12">
+      <div class="max-w-md">
+        <div class="flex items-center gap-3 mb-8">
+          <div class="w-8 h-8">
+            <img alt="BKU Logo Footer" class="w-full h-full object-contain" src="./assets/images/logo.png">
+          </div>
+          <span class="text-xl font-bold">BKU Parking</span>
+        </div>
+        <p class="text-sm text-gray-700 leading-relaxed mb-8">
+          If you do not have an account or forgot your password, please contact the Data and Information Technology Center, Building A5 - Room 107 for support.
         </p>
-<p class="text-xs text-gray-500 leading-relaxed">
-          Copyright © 2026 TANBINHTAINANGTEAM<br/>
-          All right reserved.
+        <p class="text-xs text-gray-500 leading-relaxed">
+          Copyright &copy; 2026 TANBINHTAINANGTEAM<br>
+          All rights reserved.
         </p>
-</div>
-<!-- Links and Contact Info -->
-<div class="flex flex-col md:flex-row gap-20">
-<!-- Technician Column -->
-<div class="flex flex-col gap-4">
-<h3 class="text-sm font-semibold mb-2">Technician</h3>
-<div>
-<p class="text-xs text-gray-500">Email:</p>
-<a class="text-sm hover:underline" href="mailto:mailcanhan@hcmut.edu.vn">mailcanhan@hcmut.edu.vn</a>
-</div>
-<div>
-<p class="text-xs text-gray-500">Tel:</p>
-<p class="text-sm">(84) 68.6868.6868</p>
-</div>
-</div>
-<!-- Help Column -->
-<div class="flex flex-col gap-4">
-<h3 class="text-sm font-semibold mb-2">Help</h3>
-<ul class="flex flex-col gap-4 text-sm">
-<li><a class="hover:underline" href="#">Contact Us</a></li>
-<li><a class="hover:underline" href="#">Privacy Policy</a></li>
-<li><a class="hover:underline" href="#">Terms of service</a></li>
-</ul>
-</div>
-</div>
-</div>
-</footer>
-<!-- END: MainFooter -->
-  <script defer src="./scripts/i18n.js?v=20260424-06"></script>
-</body></html>
+      </div>
+
+      <div class="flex flex-col md:flex-row gap-20">
+        <div class="flex flex-col gap-4">
+          <h3 class="text-sm font-semibold mb-2">Technician</h3>
+          <div>
+            <p class="text-xs text-gray-500">Email:</p>
+            <a class="text-sm hover:underline" href="mailto:mailcanhan@hcmut.edu.vn">mailcanhan@hcmut.edu.vn</a>
+          </div>
+          <div>
+            <p class="text-xs text-gray-500">Tel:</p>
+            <p class="text-sm">(84) 68.6868.6868</p>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-4">
+          <h3 class="text-sm font-semibold mb-2">Help</h3>
+          <ul class="flex flex-col gap-4 text-sm">
+            <li><a class="hover:underline" href="./settings-home.html">Contact Us</a></li>
+            <li><a class="hover:underline" href="./settings-bill.html">Privacy Policy</a></li>
+            <li><a class="hover:underline" href="./login.html">Terms of service</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script defer src="./scripts/i18n.js?v=20260508-02"></script>
+  <script>
+    (() => {
+      const landingNavModeKey = "bkuParkingNavMode";
+      const landingProfileKey = "bkuParkingProfile";
+      const defaultNavActions = document.querySelector("#default-nav-actions");
+      const authNavActions = document.querySelector("#auth-nav-actions");
+      const authAvatar = document.querySelector("#auth-avatar");
+      const authLabel = document.querySelector("#auth-label");
+      const authState = sessionStorage.getItem(landingNavModeKey);
+
+      function showActions(target) {
+        defaultNavActions?.classList.add("hidden");
+        authNavActions?.classList.add("hidden");
+        defaultNavActions?.classList.remove("flex");
+        authNavActions?.classList.remove("flex");
+        target?.classList.remove("hidden");
+        target?.classList.add("flex");
+      }
+
+      if (authState === "authenticated") {
+        const savedProfile = (() => {
+          try {
+            return JSON.parse(localStorage.getItem(landingProfileKey) || "{}");
+          } catch {
+            return {};
+          }
+        })();
+        if (savedProfile.avatar && authAvatar) {
+          authAvatar.src = savedProfile.avatar;
+        }
+        if (savedProfile.firstName && authLabel) {
+          authLabel.textContent = savedProfile.firstName;
+        }
+        showActions(authNavActions);
+      } else {
+        showActions(defaultNavActions);
+      }
+    })();
+  </script>
+</body>
+</html>

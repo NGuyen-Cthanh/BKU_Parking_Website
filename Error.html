@@ -1,136 +1,163 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 Page Not Found - BKU Parking</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 
-<html lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>404 Page Not Found - BKU Parking</title>
-<!-- Tailwind CSS v3 CDN -->
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<style data-purpose="typography">
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
     body {
-      font-family: 'Inter', sans-serif;
-    }
-  </style>
-<style data-purpose="custom-styling">
-    .bku-blue-text { color: #1E40AF; }
-    .bku-blue-border { border-color: #3B82F6; }
-    .bku-blue-bg { background-color: #3B82F6; }
-    /* Ensure footer stays at the bottom for short pages */
-    body {
+      font-family: "Inter", sans-serif;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
     }
+
     main {
       flex-grow: 1;
     }
   </style>
 </head>
-<body class="bg-white text-gray-900">
-<!-- BEGIN: MainHeader -->
-<header class="w-full border-b border-gray-100 bg-white" data-purpose="main-header">
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
-<!-- Logo Container -->
-<div class="flex items-center space-x-2">
-<img alt="BKU Logo" class="w-10 h-10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9BAy9BkvFRxN7zCBP6SJdoOh2EMJXtKTRN4ojvrbvFFRLfQ44R-pM4l85l4a6JOK5BU8wylsgqT0JbqAyPJuR7746DX0bvVTlWkoGlDBcmtALcZaJ8hl16bS_kvVDLLBLEH4kiTNt83I48r8Dal3vdOs4R9pTv2qvn9CjU4g3GJ1JveFmCM_5YgkQ3S9KdUXitlDRF1M-9tdCi7hARs735NasD3N4OSa2glHtCmINwz9DzH2DbA4HOk-X7aZxgNTcX1yrcopRJJob"/>
-<span class="text-2xl font-bold tracking-tight text-[#0f172a]">BKU Parking</span>
-</div>
-<!-- Navigation Links -->
-<nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-700">
-<a class="hover:text-blue-600" href="./index.html">Home</a>
-<a class="hover:text-blue-600" href="./index.html#landscape-map">Map</a>
-<a class="hover:text-blue-600" href="./BKPay.html">BKPay</a>
-</nav>
-<!-- Search and Auth -->
-<div class="flex items-center space-x-6">
-<!-- Search Icon -->
-<button class="text-gray-500 hover:text-gray-700">
-<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-</button>
-<!-- Separator -->
-<div class="h-6 w-px bg-gray-300"></div>
-<!-- Auth Links -->
-<div class="flex items-center space-x-6">
-<a class="flex items-center space-x-2 text-gray-700 font-medium hover:text-blue-600" href="#">
-<svg class="h-5 w-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-<path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-<span>Login</span>
-</a>
-<a class="flex items-center space-x-2 text-blue-500 font-medium hover:text-blue-700" href="#">
-<svg class="h-5 w-5" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-<path d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-</svg>
-<span>Sign Up</span>
-</a>
-</div>
-</div>
-</div>
-</header>
-<!-- END: MainHeader -->
-<!-- BEGIN: ErrorContent -->
-<main class="flex flex-col items-center justify-center py-20 px-4" data-purpose="404-content">
-<!-- Rocket Icon Container -->
-<div class="mb-8 opacity-20">
-<svg class="rotate-45" fill="currentColor" height="120" viewbox="0 0 24 24" width="120" xmlns="http://www.w3.org/2000/svg">
-<path d="M13.13 11.022c0.232-0.232 0.232-0.607 0-0.839-0.231-0.232-0.607-0.232-0.838 0l-1.047 1.047c-0.232 0.232-0.232 0.608 0 0.839 0.231 0.232 0.607 0.232 0.839 0l1.046-1.047zM20.841 3.159c-0.413-0.413-1.03-0.548-1.579-0.344l-11.83 4.436c-0.584 0.219-0.84 0.902-0.551 1.458l1.454 2.805c0.057 0.111 0.147 0.201 0.258 0.258l2.805 1.454c0.556 0.289 1.239 0.033 1.458-0.551l4.436-11.83c0.204-0.549 0.069-1.166-0.344-1.579l-0.107-0.107zM18.804 5.196l-3.333 8.887-1.745-0.904c-0.463-0.241-1.022-0.117-1.343 0.304l-1.637 2.146c-0.112 0.146-0.323 0.151-0.441 0.01l-1.527-1.831c-0.141-0.169-0.395-0.169-0.536 0l-1.527 1.831c-0.118 0.141-0.329 0.136-0.441-0.01l-1.637-2.146c-0.321-0.421-0.88-0.545-1.343-0.304l-1.745 0.904 8.887-3.333 8.384-8.384v0.126z"></path>
-</svg>
-</div>
-<!-- 404 Text -->
-<h1 class="text-[120px] font-extrabold text-gray-900 leading-none mb-2" data-purpose="error-code">404</h1>
-<h2 class="text-[40px] font-bold text-gray-800 mb-10" data-purpose="error-message">Page Not Found</h2>
-<!-- Back to Home Button -->
-<a class="inline-block border-2 border-blue-500 text-blue-500 font-semibold px-12 py-3.5 hover:bg-blue-50 transition-colors duration-200" data-purpose="home-button" href="./index.html">
+<body class="bg-white text-gray-900" data-page="error">
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm h-16">
+    <div class="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <img alt="BKU Logo" class="w-10 h-10 object-contain" src="./assets/images/logo.png">
+        <span class="text-xl font-bold text-gray-800">BKU Parking</span>
+      </div>
+
+      <nav class="hidden md:flex items-center space-x-8 font-medium">
+        <a class="hover:text-blue-700 transition-colors" href="./index.html">Home</a>
+        <a class="hover:text-blue-700 transition-colors" href="./index.html#landscape-map">Map</a>
+        <a class="hover:text-blue-700 transition-colors" href="./BKPay_Bill.html">BKPay</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button class="text-gray-600 hover:text-blue-700" type="button" aria-label="Search">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+        </button>
+
+        <div class="h-5 w-px bg-gray-300"></div>
+
+        <div class="hidden items-center gap-3" id="auth-nav-actions">
+          <a aria-label="Open account settings" class="h-8 w-8 overflow-hidden rounded-full hover:opacity-90 transition-opacity border border-gray-200" href="./settings-home.html">
+            <img alt="Account avatar" class="h-full w-full object-cover" id="auth-avatar" src="./assets/images/thanh-avatar.svg">
+          </a>
+          <span class="text-sm font-medium text-gray-800" id="auth-label">Thanh</span>
+        </div>
+
+        <div class="flex items-center gap-2" id="default-nav-actions">
+          <a class="flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors" href="./login.html">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+            <span>Login</span>
+          </a>
+          <a class="flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-700 px-3 py-1.5 rounded-lg border border-blue-200 hover:border-blue-400 hover:bg-blue-50 transition-colors" href="./login.html">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+            <span>Sign Up</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex flex-col items-center justify-center py-20 px-4 mt-16" data-purpose="404-content">
+    <div class="mb-8 opacity-20">
+      <svg class="rotate-45" fill="currentColor" height="120" viewBox="0 0 24 24" width="120" xmlns="http://www.w3.org/2000/svg">
+        <path d="M13.13 11.022c0.232-0.232 0.232-0.607 0-0.839-0.231-0.232-0.607-0.232-0.838 0l-1.047 1.047c-0.232 0.232-0.232 0.608 0 0.839 0.231 0.232 0.607 0.232 0.839 0l1.046-1.047zM20.841 3.159c-0.413-0.413-1.03-0.548-1.579-0.344l-11.83 4.436c-0.584 0.219-0.84 0.902-0.551 1.458l1.454 2.805c0.057 0.111 0.147 0.201 0.258 0.258l2.805 1.454c0.556 0.289 1.239 0.033 1.458-0.551l4.436-11.83c0.204-0.549 0.069-1.166-0.344-1.579l-0.107-0.107zM18.804 5.196l-3.333 8.887-1.745-0.904c-0.463-0.241-1.022-0.117-1.343 0.304l-1.637 2.146c-0.112 0.146-0.323 0.151-0.441 0.01l-1.527-1.831c-0.141-0.169-0.395-0.169-0.536 0l-1.527 1.831c-0.118 0.141-0.329 0.136-0.441-0.01l-1.637-2.146c-0.321-0.421-0.88-0.545-1.343-0.304l-1.745 0.904 8.887-3.333 8.384-8.384v0.126z"></path>
+      </svg>
+    </div>
+    <h1 class="text-[120px] font-extrabold text-gray-900 leading-none mb-2" data-purpose="error-code">404</h1>
+    <h2 class="text-[40px] font-bold text-gray-800 mb-10" data-purpose="error-message">Page Not Found</h2>
+    <a class="inline-block border-2 border-blue-500 text-blue-500 font-semibold px-12 py-3.5 hover:bg-blue-50 transition-colors duration-200" data-purpose="home-button" href="./index.html">
       Home Page
     </a>
-</main>
-<!-- END: ErrorContent -->
-<!-- BEGIN: MainFooter -->
-<footer class="bg-[#F8FAFC] py-16 px-4" data-purpose="main-footer">
-<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8">
-<!-- Brand & Description Column -->
-<div class="md:col-span-5 pr-8">
-<div class="flex items-center space-x-2 mb-6">
-<img alt="BKU Logo" class="w-10 h-10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMNaRadDfjBghH0KoHNIFoy3TRK9GL6EX4q13XuJoQkAbNnekTf61pjpGznqgJSV6Gka1C2yFUr6WhdZhVRqXdmIw_3Mdxp48Hir1KXdcLFqEjYFS-37PLX0Ojyld6JDHp3JfHdOAmarhdjVIdze3DdK-b9_MYE88fZdmsS0xNxdrPgVzLXfx8dpz4OsY9Q6d9LZP6gpvPJqneIMUNLiELQKiWWq1d0CRyM0FrMoN7d2Cu8WZu_qykOew22WR_Vo3h_lGzhCPrmaRB"/>
-<span class="text-2xl font-bold tracking-tight text-[#0f172a]">BKU Parking</span>
-</div>
-<p class="text-sm text-gray-600 mb-8 leading-relaxed max-w-sm">
-          Quý Thầy/Cô chưa có tài khoản (hoặc quên mật khẩu) nhà trường vui lòng liên hệ Trung tâm Dữ liệu &amp; Công nghệ Thông tin, nhà A5 - phòng 107 để được hỗ trợ.
+  </main>
+
+  <footer class="bg-[#F8FAFC] py-16 px-4" data-purpose="main-footer">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8">
+      <div class="md:col-span-5 pr-8">
+        <div class="flex items-center space-x-2 mb-6">
+          <img alt="BKU Logo" class="w-10 h-10" src="./assets/images/logo.png">
+          <span class="text-2xl font-bold tracking-tight text-[#0f172a]">BKU Parking</span>
+        </div>
+        <p class="text-sm text-gray-600 mb-8 leading-relaxed max-w-sm">
+          If you do not have an account or forgot your password, please contact the Data and Information Technology Center, Building A5 - Room 107 for support.
         </p>
-<p class="text-sm text-gray-500">
-          Copyright © 2026 TANBINHTAINANGTEAM<br/>All right reserved.
+        <p class="text-sm text-gray-500">
+          Copyright &copy; 2026 TANBINHTAINANGTEAM<br>All rights reserved.
         </p>
-</div>
-<!-- Spacer -->
-<div class="hidden md:block md:col-span-2"></div>
-<!-- Technician Info Column -->
-<div class="md:col-span-3">
-<h3 class="text-lg font-bold text-gray-900 mb-6">Technician</h3>
-<div class="space-y-4">
-<div>
-<p class="text-sm font-semibold text-gray-900">Email:</p>
-<p class="text-sm text-gray-600">mailcanhan@hcmut.edu.vn</p>
-</div>
-<div>
-<p class="text-sm font-semibold text-gray-900">Tel:</p>
-<p class="text-sm text-gray-600">(84) 68.6868.6868</p>
-</div>
-</div>
-</div>
-<!-- Help Column -->
-<div class="md:col-span-2">
-<h3 class="text-lg font-bold text-gray-900 mb-6">Help</h3>
-<ul class="space-y-4 text-sm text-gray-600">
-<li><a class="hover:text-blue-600" href="#">Contact Us</a></li>
-<li><a class="hover:text-blue-600" href="#">Privacy Policy</a></li>
-<li><a class="hover:text-blue-600" href="#">Terms of service</a></li>
-</ul>
-</div>
-</div>
-</footer>
-<!-- END: MainFooter -->
-  <script defer src="./scripts/i18n.js?v=20260424-06"></script>
-</body></html>
+      </div>
+
+      <div class="hidden md:block md:col-span-2"></div>
+
+      <div class="md:col-span-3">
+        <h3 class="text-lg font-bold text-gray-900 mb-6">Technician</h3>
+        <div class="space-y-4">
+          <div>
+            <p class="text-sm font-semibold text-gray-900">Email:</p>
+            <p class="text-sm text-gray-600">mailcanhan@hcmut.edu.vn</p>
+          </div>
+          <div>
+            <p class="text-sm font-semibold text-gray-900">Tel:</p>
+            <p class="text-sm text-gray-600">(84) 68.6868.6868</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="md:col-span-2">
+        <h3 class="text-lg font-bold text-gray-900 mb-6">Help</h3>
+        <ul class="space-y-4 text-sm text-gray-600">
+          <li><a class="hover:text-blue-600" href="./settings-home.html">Contact Us</a></li>
+          <li><a class="hover:text-blue-600" href="./settings-bill.html">Privacy Policy</a></li>
+          <li><a class="hover:text-blue-600" href="./login.html">Terms of service</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script defer src="./scripts/i18n.js?v=20260508-02"></script>
+  <script>
+    (() => {
+      const landingNavModeKey = "bkuParkingNavMode";
+      const landingProfileKey = "bkuParkingProfile";
+      const defaultNavActions = document.querySelector("#default-nav-actions");
+      const authNavActions = document.querySelector("#auth-nav-actions");
+      const authAvatar = document.querySelector("#auth-avatar");
+      const authLabel = document.querySelector("#auth-label");
+      const authState = sessionStorage.getItem(landingNavModeKey);
+
+      function showActions(target) {
+        defaultNavActions?.classList.add("hidden");
+        authNavActions?.classList.add("hidden");
+        defaultNavActions?.classList.remove("flex");
+        authNavActions?.classList.remove("flex");
+        target?.classList.remove("hidden");
+        target?.classList.add("flex");
+      }
+
+      if (authState === "authenticated") {
+        const savedProfile = (() => {
+          try {
+            return JSON.parse(localStorage.getItem(landingProfileKey) || "{}");
+          } catch {
+            return {};
+          }
+        })();
+        if (savedProfile.avatar && authAvatar) {
+          authAvatar.src = savedProfile.avatar;
+        }
+        if (savedProfile.firstName && authLabel) {
+          authLabel.textContent = savedProfile.firstName;
+        }
+        showActions(authNavActions);
+      } else {
+        showActions(defaultNavActions);
+      }
+    })();
+  </script>
+</body>
+</html>

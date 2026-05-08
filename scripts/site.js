@@ -1,6 +1,8 @@
 const storageKey = "bkuParkingProfile";
 const navModeKey = "bkuParkingNavMode";
 const loginActivityKey = "bkuParkingLoginActivity";
+const selectedSpotStorageKey = "bkuParkingSelectedSpotKey";
+const parkingGateStorageKey = "bkuParkingGateIndex";
 const loginWindowDays = 30;
 const sensorSourceName = "Sensors data.xlsx";
 const sensorWorkbookPath = "./Sensors%20data.xlsx";
@@ -22,53 +24,91 @@ const parkingMapState = {
   hasLiveWorkbook: false,
   pollId: null,
   renderedSignature: "",
-  selectedSpotKey: ""
+  selectedSpotKey: "",
+  currentGateIndex: 0,
+  zones: [],
+  zonesSignature: "",
+  statusMessage: "",
+  billingRows: [],
+  popupSpotKey: ""
 };
 const billingPageState = {
   hasLiveWorkbook: false,
   pollId: null,
   renderedSignature: ""
 };
-const parkingZoneLayout = {
-  top: { zone: "F", rows: [10, 10, 10, 10], showNumbers: true },
-  main: [
-    { type: "single", zone: "A", stacks: [13, 13] },
-    { type: "divider" },
-    {
-      type: "paired",
-      zones: [
-        { zone: "B", stacks: [13, 13] },
-        { zone: "C", stacks: [13, 13] }
-      ]
-    },
-    { type: "divider" },
-    {
-      type: "paired",
-      zones: [
-        { zone: "D", stacks: [13, 13] },
-        { zone: "E", stacks: [13, 13] }
-      ]
-    }
-  ]
-};
+const parkingGateLayouts = [
+  { // Gate 1
+    top: { zone: "F", rows: [10, 10, 10, 10], showNumbers: true },
+    main: [
+      { zone: "A", stacks: [13, 13] },
+      { zone: "B", stacks: [13, 13] },
+      { zone: "C", stacks: [13, 13] },
+      { zone: "D", stacks: [13, 13] },
+      { zone: "E", stacks: [13, 13] }
+    ]
+  },
+  { // Gate 2
+    main: [
+      { zone: "A", stacks: [15, 15, 15, 15] }
+    ]
+  },
+  { // Gate 3
+    top: { zone: "F", rows: [6, 6, 6, 6], showNumbers: true },
+    main: [
+      { zone: "A", stacks: [13, 13] },
+      { zone: "B", stacks: [13, 13] },
+      { zone: "C", stacks: [13, 13] },
+      { zone: "D", stacks: [13, 13] },
+      { zone: "E", stacks: [10, 10] }
+    ]
+  }
+];
+const parkingGateConfigs = [
+  {
+    key: "gate-1",
+    number: 1,
+    image: "./assets/images/Map Gate 1.png",
+    imageAlt: "Gate 1 route map"
+  },
+  {
+    key: "gate-2",
+    number: 2,
+    image: "./assets/images/Map Gate 2.png",
+    imageAlt: "Gate 2 route map"
+  },
+  {
+    key: "gate-3",
+    number: 3,
+    image: "./assets/images/Map Gate 3.png",
+    imageAlt: "Gate 3 route map"
+  }
+];
 
 const fallbackSensorStatuses = {
   A: [0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1],
   B: [0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1],
   C: [0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1],
-  D: [0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1]
+  D: [0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1],
+  E: [0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 0],
+  F: [
+    0, 0, 1, 0, 0, 1, 0, 1, 0, 0,
+    1, 0, 0, 1, 0, 1, 0, 0, 1, 0,
+    0, 1, 0, 1, 0, 0, 1, 0, 0, 1,
+    0, 1, 0, 0, 1, 0, 0, 1, 0, 1
+  ]
 };
 
 const fallbackBillingRows = [
-  { date: "18.04.2026", checkIn: "7:00 am", checkOut: "12:00 pm", fee: 2000, durationMinutes: 300, slot: "A01" },
-  { date: "17.04.2026", checkIn: "8:00 am", checkOut: "1:00 pm", fee: 2000, durationMinutes: 300, slot: "B08" },
-  { date: "16.04.2026", checkIn: "12:00 pm", checkOut: "6:02 pm", fee: 3000, durationMinutes: 362, slot: "C12" },
-  { date: "15.04.2026", checkIn: "10:00 am", checkOut: "12:00 pm", fee: 2000, durationMinutes: 120, slot: "D23" },
-  { date: "14.04.2026", checkIn: "12:00 am", checkOut: "6:05 pm", fee: 3000, durationMinutes: 1085, slot: "E17" },
-  { date: "13.04.2026", checkIn: "1:00 pm", checkOut: "7:18 pm", fee: 3000, durationMinutes: 378, slot: "F14" },
-  { date: "12.04.2026", checkIn: "2:00 pm", checkOut: "4:32 pm", fee: 2000, durationMinutes: 152, slot: "C25" },
-  { date: "11.04.2026", checkIn: "7:00 am", checkOut: "5:52 pm", fee: 2000, durationMinutes: 652, slot: "B18" },
-  { date: "10.04.2026", checkIn: "7:00 am", checkOut: "6:00 pm", fee: 3000, durationMinutes: 660, slot: "E20" }
+  { date: "18.04.2026", checkIn: "7:00 am", checkOut: "12:00 pm", fee: 2000, durationMinutes: 300, slot: "A01", number: "36F-888.88" },
+  { date: "17.04.2026", checkIn: "8:00 am", checkOut: "1:00 pm", fee: 2000, durationMinutes: 300, slot: "B08", number: "36F-888.88" },
+  { date: "16.04.2026", checkIn: "12:00 pm", checkOut: "6:02 pm", fee: 3000, durationMinutes: 362, slot: "C12", number: "36F-888.88" },
+  { date: "15.04.2026", checkIn: "10:00 am", checkOut: "12:00 pm", fee: 2000, durationMinutes: 120, slot: "D23", number: "36F-888.88" },
+  { date: "14.04.2026", checkIn: "12:00 am", checkOut: "6:05 pm", fee: 3000, durationMinutes: 1085, slot: "E17", number: "36F-888.88" },
+  { date: "13.04.2026", checkIn: "1:00 pm", checkOut: "7:18 pm", fee: 3000, durationMinutes: 378, slot: "F14", number: "36F-888.88" },
+  { date: "12.04.2026", checkIn: "2:00 pm", checkOut: "4:32 pm", fee: 2000, durationMinutes: 152, slot: "C25", number: "36F-888.88" },
+  { date: "11.04.2026", checkIn: "7:00 am", checkOut: "5:52 pm", fee: 2000, durationMinutes: 652, slot: "B18", number: "36F-888.88" },
+  { date: "10.04.2026", checkIn: "7:00 am", checkOut: "6:00 pm", fee: 3000, durationMinutes: 660, slot: "E20", number: "36F-888.88" }
 ];
 
 function t(key, values = {}) {
@@ -105,7 +145,8 @@ window.addEventListener("beforeunload", stopBillingPolling);
 
 async function initParkingMap() {
   stopParkingMapPolling();
-  await refreshParkingMapData({ showLoading: true });
+  parkingMapState.currentGateIndex = readSavedGateIndex();
+  await refreshParkingMapData({ showLoading: true, initialLoad: true });
   parkingMapState.pollId = window.setInterval(() => {
     refreshParkingMapData({ silent: true }).catch(() => {});
   }, sensorPollIntervalMs);
@@ -118,7 +159,7 @@ function stopParkingMapPolling() {
   }
 }
 
-async function refreshParkingMapData({ showLoading = false, silent = false } = {}) {
+async function refreshParkingMapData({ showLoading = false, silent = false, initialLoad = false } = {}) {
   const lowerContainer = document.querySelector("#parking-lower");
   const statusMessageNode = document.querySelector("#parking-status-message");
 
@@ -135,9 +176,10 @@ async function refreshParkingMapData({ showLoading = false, silent = false } = {
       loadParkingZonesFromWorkbook(),
       loadBillingInfoFromWorkbook().catch(() => null)
     ]);
-    const selectedSpotKey = getLatestSelectedSpotKeyFromBillingRows(billingData?.rows || readFallbackBillingRows());
+    const workbookSelectedSpotKey = getLatestSelectedSpotKeyFromBillingRows(billingData?.rows || readFallbackBillingRows());
+    const selection = resolvePreferredSelectedSpot(zoneData.zones, workbookSelectedSpotKey);
     const selectionMessage = billingData
-      ? t("landing.selectedSlotSynced", { source: billingSourceName })
+      ? buildParkingSelectionMessage(selection.source, selection.spotKey)
       : t("landing.selectedSlotFallback");
     const statusMessage = t("landing.liveSyncStatus", {
       source: sensorSourceName,
@@ -145,27 +187,36 @@ async function refreshParkingMapData({ showLoading = false, silent = false } = {
       selectionMessage,
       time: formatTime(new Date())
     });
+    parkingMapState.billingRows = billingData?.rows || readFallbackBillingRows();
+    if (initialLoad) {
+      autoJumpToGateForSpot(selection.spotKey);
+    }
     renderParkingMapView(
       zoneData.zones,
-      `${zoneData.signature}|selected:${selectedSpotKey || "-"}`,
+      zoneData.signature,
       statusMessage,
-      selectedSpotKey
+      selection.spotKey
     );
     parkingMapState.hasLiveWorkbook = true;
     return;
   } catch (error) {
     const fallbackZones = readFallbackParkingZones();
     const fallbackSignature = `fallback:${buildZonesSignature(fallbackZones)}`;
+    const fallbackSelection = resolvePreferredSelectedSpot(fallbackZones, readFallbackSelectedSpotKey());
     const protocolHint = window.location.protocol === "file:"
       ? t("common.localServerRequired")
       : t("landing.parkingDataUnavailable", { source: sensorSourceName });
 
     if (!parkingMapState.hasLiveWorkbook && fallbackZones.length) {
+      parkingMapState.billingRows = readFallbackBillingRows();
+      if (initialLoad) {
+        autoJumpToGateForSpot(fallbackSelection.spotKey);
+      }
       renderParkingMapView(
         fallbackZones,
-        `${fallbackSignature}|selected:${readFallbackSelectedSpotKey() || "-"}`,
+        fallbackSignature,
         t("landing.fallbackParkingData", { protocolHint }),
-        readFallbackSelectedSpotKey()
+        fallbackSelection.spotKey
       );
       return;
     }
@@ -309,7 +360,8 @@ function extractSelectedSpotFromRows(rows) {
       }
 
       const dateValue = columnIndexes.date === -1 ? "" : dataRow[columnIndexes.date];
-      const timestamp = parseSelectionTimestamp(dateValue);
+      const timeValue = columnIndexes.time === -1 ? "" : dataRow[columnIndexes.time];
+      const timestamp = parseSelectionTimestamp(dateValue, timeValue);
       const candidate = {
         spotKey,
         timestamp,
@@ -380,7 +432,7 @@ function compareSelectionCandidates(left, right) {
     return leftTimestamp - rightTimestamp;
   }
 
-  return (right.rowIndex || 0) - (left.rowIndex || 0);
+  return (left.rowIndex || 0) - (right.rowIndex || 0);
 }
 
 function getLatestSelectedSpotKeyFromBillingRows(rows) {
@@ -392,7 +444,7 @@ function getLatestSelectedSpotKeyFromBillingRows(rows) {
 
     const candidate = {
       spotKey,
-      timestamp: parseSelectionTimestamp(row?.date),
+      timestamp: parseSelectionTimestamp(row?.date, row?.checkIn || row?.checkOut),
       rowIndex: index + 1
     };
 
@@ -433,9 +485,18 @@ function parseSelectedSpotKey(slotValue, zoneValue = "") {
   return getSpotKey(zoneLabel, Number(slotNumberMatch[1]));
 }
 
-function parseSelectionTimestamp(dateValue) {
+function parseSelectionTimestamp(dateValue, timeValue = "") {
   const dateTimestamp = parseDateLikeValue(dateValue);
-  return Number.isFinite(dateTimestamp) ? dateTimestamp : Number.NEGATIVE_INFINITY;
+  if (!Number.isFinite(dateTimestamp)) {
+    return Number.NEGATIVE_INFINITY;
+  }
+
+  const timeInMinutes = extractTimeTotalMinutes(timeValue);
+  if (timeInMinutes === null) {
+    return dateTimestamp;
+  }
+
+  return dateTimestamp + (timeInMinutes * 60000);
 }
 
 function parseDateLikeValue(value) {
@@ -515,23 +576,111 @@ function readFallbackParkingZones() {
     .filter((zone) => zone.spots.length);
 }
 
-function renderParkingMapView(zones, signature, statusMessage, selectedSpotKey = "") {
+function resolvePreferredSelectedSpot(zones, workbookSelectedSpotKey = "") {
+  return {
+    spotKey: workbookSelectedSpotKey || "",
+    source: workbookSelectedSpotKey ? "billing" : "none"
+  };
+}
+
+function buildParkingSelectionMessage(selectionSource, selectedSpotKey = "") {
+  if (selectionSource === "manual" && selectedSpotKey) {
+    return t("landing.selectedSlotManual", { slot: formatSpotKeyLabel(selectedSpotKey) });
+  }
+
+  return t("landing.selectedSlotSynced", { source: billingSourceName });
+}
+
+function readSavedSelectedSpotKey() {
+  return String(localStorage.getItem(selectedSpotStorageKey) || "").trim();
+}
+
+function readSavedGateIndex() {
+  const savedIndex = Number(localStorage.getItem(parkingGateStorageKey));
+
+  if (!Number.isInteger(savedIndex) || savedIndex < 0 || savedIndex >= parkingGateConfigs.length) {
+    return 0;
+  }
+
+  return savedIndex;
+}
+
+function saveSelectedSpotKey(spotKey) {
+  if (!spotKey) {
+    clearSavedSelectedSpotKey();
+    return;
+  }
+
+  localStorage.setItem(selectedSpotStorageKey, spotKey);
+}
+
+function clearSavedSelectedSpotKey() {
+  localStorage.removeItem(selectedSpotStorageKey);
+}
+
+function saveGateIndex(index) {
+  localStorage.setItem(parkingGateStorageKey, String(index));
+}
+
+function getCurrentGateConfig() {
+  return parkingGateConfigs[parkingMapState.currentGateIndex] || parkingGateConfigs[0];
+}
+
+function updateParkingLotSummary(gateConfig) {
+  const lotTitleNode = document.querySelector("#parking-lot-title");
+
+  if (!lotTitleNode) {
+    return;
+  }
+
+  lotTitleNode.textContent = getGateLotTitle(gateConfig.number);
+}
+
+function getGateLotTitle(gateNumber) {
+  return window.bkuI18n?.getLanguage?.() === "vi"
+    ? `Bãi xe cổng ${gateNumber}`
+    : `Gate ${gateNumber} Parking`;
+}
+
+function isSpotAvailable(zones, spotKey) {
+  return zones.some((zone) =>
+    zone.spots.some((spot) => getSpotKey(zone.zone, spot.number) === spotKey && spot.status === 0)
+  );
+}
+
+function formatSpotKeyLabel(spotKey) {
+  const [zoneLabel, rawSpotNumber] = String(spotKey || "").split(":");
+  const spotNumber = Number(rawSpotNumber);
+
+  if (!zoneLabel || !Number.isFinite(spotNumber)) {
+    return spotKey;
+  }
+
+  return `${zoneLabel}${formatSlotNumber(spotNumber)}`;
+}
+
+function renderParkingMapView(zones, zonesSignature, statusMessage, selectedSpotKey = "") {
   const lowerContainer = document.querySelector("#parking-lower");
-  const availableCountNode = document.querySelector("#parking-available-count");
-  const totalCountNode = document.querySelector("#parking-total-count");
   const statusMessageNode = document.querySelector("#parking-status-message");
+  const gateConfig = getCurrentGateConfig();
 
   if (!lowerContainer) {
     return;
   }
 
+  const renderedSignature = `${zonesSignature}|selected:${selectedSpotKey || "-"}|gate:${gateConfig.key}`;
+  parkingMapState.zones = zones;
+  parkingMapState.zonesSignature = zonesSignature;
+  parkingMapState.statusMessage = statusMessage;
   parkingMapState.selectedSpotKey = selectedSpotKey || "";
+  updateParkingLotSummary(gateConfig);
 
-  if (parkingMapState.renderedSignature !== signature) {
+  if (parkingMapState.renderedSignature !== renderedSignature) {
+    closeSpotPopup();
     lowerContainer.innerHTML = `
-      <button class="map-arrow" type="button" data-direction="left" aria-label="Scroll parking map left">&#10094;</button>
+      <button class="map-arrow" type="button" data-direction="left" aria-label="Show previous gate">&#10094;</button>
       <div class="parking-columns">${createParkingMapMarkup(zones)}</div>
-      <button class="map-arrow" type="button" data-direction="right" aria-label="Scroll parking map right">&#10095;</button>
+      <button class="map-arrow" type="button" data-direction="right" aria-label="Show next gate">&#10095;</button>
     `;
 
     const totalSpots = zones.reduce((sum, zone) => sum + zone.spots.length, 0);
@@ -539,6 +688,9 @@ function renderParkingMapView(zones, signature, statusMessage, selectedSpotKey =
       (sum, zone) => sum + zone.spots.filter((spot) => spot.status === 0).length,
       0
     );
+
+    const availableCountNode = document.querySelector("#parking-available-count");
+    const totalCountNode = document.querySelector("#parking-total-count");
 
     if (availableCountNode) {
       availableCountNode.textContent = formatSlotNumber(availableSpots);
@@ -548,8 +700,9 @@ function renderParkingMapView(zones, signature, statusMessage, selectedSpotKey =
       totalCountNode.textContent = formatSlotNumber(totalSpots);
     }
 
-    bindMapArrows(lowerContainer);
-    parkingMapState.renderedSignature = signature;
+    bindGateArrows(lowerContainer);
+    bindParkingSpotButtons(lowerContainer);
+    parkingMapState.renderedSignature = renderedSignature;
   }
 
   if (statusMessageNode) {
@@ -559,62 +712,60 @@ function renderParkingMapView(zones, signature, statusMessage, selectedSpotKey =
 
 function createParkingMapMarkup(zones) {
   const zoneLookup = new Map(zones.map((zone) => [normalizeZoneLabel(zone.zone), zone]));
-  const topMarkup = createTopZoneMarkup(zoneLookup);
-  const mainMarkup = parkingZoneLayout.main
-    .map((entry) => {
-      if (entry.type === "divider") {
-        return '<div class="parking-lane-divider" aria-hidden="true"></div>';
-      }
+  const gateConfig = getCurrentGateConfig();
+  const layout = parkingGateLayouts[parkingMapState.currentGateIndex];
+  
+  const gateMapMarkup = createGateMapMarkup(gateConfig);
+  const topMarkup = layout.top ? createTopZoneMarkup(zoneLookup, layout.top) : "";
+  const mainMarkup = createMainParkingMarkup(zoneLookup, layout.main);
 
-      if (entry.type === "single") {
-        const zone = getZoneForLayout(zoneLookup, entry.zone, sumCounts(entry.stacks));
-        return `
-          <section class="parking-column-block" aria-label="Zone ${zone.zone}">
-            <span class="parking-zone-tag">${zone.zone}</span>
-            ${createVerticalZoneColumns(zone, entry.stacks)}
-          </section>
-        `;
-      }
-
-      if (entry.type === "paired") {
-        const [leftConfig, rightConfig] = entry.zones;
-        const leftZone = getZoneForLayout(zoneLookup, leftConfig.zone, sumCounts(leftConfig.stacks));
-        const rightZone = getZoneForLayout(zoneLookup, rightConfig.zone, sumCounts(rightConfig.stacks));
-
-        return `
-          <section class="parking-paired-block" aria-label="Zones ${leftZone.zone} and ${rightZone.zone}">
-            <div class="parking-paired-labels">
-              <div class="parking-paired-label-cell">
-                <span class="parking-zone-tag">${leftZone.zone}</span>
-              </div>
-              <div class="parking-paired-label-spacer" aria-hidden="true"></div>
-              <div class="parking-paired-label-cell">
-                <span class="parking-zone-tag">${rightZone.zone}</span>
-              </div>
-            </div>
-            <div class="parking-paired-columns">
-              ${createVerticalZoneColumns(leftZone, leftConfig.stacks)}
-              <div class="parking-lane-divider parking-lane-divider-inner" aria-hidden="true"></div>
-              ${createVerticalZoneColumns(rightZone, rightConfig.stacks)}
-            </div>
-          </section>
-        `;
-      }
-
-      return "";
-    })
-    .join("");
+  const gateHeaderMarkup = `
+    <div class="parking-gate-header" style="width: 100%; max-width: min(620px, 100%); margin: 0 auto 24px; text-align: left;">
+      <h3 style="margin: 0 0 6px; font-size: 1.75rem; font-weight: 700; color: #1a1f26; letter-spacing: -0.02em;">${getGateLotTitle(gateConfig.number)}</h3>
+      <p style="margin: 0; color: #5e6673; font-size: 0.95rem; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+        <span><strong id="parking-available-count">--</strong>/<strong id="parking-total-count">--</strong> <span id="parking-available-label">spots available</span></span>
+      </p>
+    </div>
+  `;
 
   return `
     <div class="parking-map-stage">
+      ${gateMapMarkup}
+      ${gateHeaderMarkup}
       ${topMarkup}
       <div class="parking-main-layout">${mainMarkup}</div>
     </div>
   `;
 }
 
-function createTopZoneMarkup(zoneLookup) {
-  const topConfig = parkingZoneLayout.top;
+function createGateMapMarkup(gateConfig) {
+  return `
+    <section class="parking-gate-map-block" aria-label="${gateConfig.imageAlt}">
+      <img class="parking-gate-map" src="${gateConfig.image}" alt="${gateConfig.imageAlt}">
+    </section>
+  `;
+}
+
+function createMainParkingMarkup(zoneLookup, mainLayout) {
+  return mainLayout
+    .map((entry, index) => {
+      const zone = getZoneForLayout(zoneLookup, entry.zone, sumCounts(entry.stacks));
+      const zoneMarkup = `
+        <section class="parking-main-zone" aria-label="Zone ${zone.zone}">
+          <span class="parking-zone-tag">${zone.zone}</span>
+          ${createVerticalZoneColumns(zone, entry.stacks)}
+        </section>
+      `;
+      const dividerMarkup = index < mainLayout.length - 1
+        ? '<div class="parking-lane-divider" aria-hidden="true"></div>'
+        : "";
+
+      return `${zoneMarkup}${dividerMarkup}`;
+    })
+    .join("");
+}
+
+function createTopZoneMarkup(zoneLookup, topConfig) {
   const topZone = getZoneForLayout(zoneLookup, topConfig.zone, sumCounts(topConfig.rows));
   let cursor = 0;
 
@@ -725,11 +876,32 @@ function normalizeSpot(spot, index) {
 
 function createParkingButton(zoneLabel, spot, { showNumber = true, compact = false } = {}) {
   const spotKey = getSpotKey(zoneLabel, spot.number);
-  const isSelected = parkingMapState.selectedSpotKey === spotKey;
-  const stateClass = isSelected ? "selected" : spot.status === 0 ? "available" : "unavailable";
+  let isSelected = false;
+
+  if (parkingMapState.selectedSpotKey === spotKey) {
+    let expectedGateIndex = null;
+    const billingRow = getBillingRowForSpot(spotKey);
+    if (billingRow && billingRow.gate != null) {
+      expectedGateIndex = Number(billingRow.gate) - 1;
+    } else {
+      expectedGateIndex = getGateIndexForSpotKey(spotKey);
+    }
+
+    if (expectedGateIndex === null || expectedGateIndex === parkingMapState.currentGateIndex) {
+      isSelected = true;
+    }
+  }
+
+  const isAvailable = spot.status === 0;
+  const stateClass = isSelected ? "selected" : isAvailable ? "available" : "unavailable";
   const slotLabel = showNumber && !spot.blankNumber ? formatSlotNumber(spot.number) : "";
-  const statusLabel = spot.status === 0 ? "available" : "unavailable";
+  const statusLabel = isSelected
+    ? t("landing.aria.selected")
+    : isAvailable
+      ? t("landing.aria.available")
+      : t("landing.aria.unavailable");
   const compactClassName = compact ? " parking-spot-compact" : "";
+  const isDisabled = !isSelected && !isAvailable;
 
   return `
     <button
@@ -739,25 +911,218 @@ function createParkingButton(zoneLabel, spot, { showNumber = true, compact = fal
       data-spot-number="${spot.number}"
       data-status="${spot.status}"
       aria-label="Zone ${zoneLabel} spot ${spot.number} ${statusLabel}"
-      disabled
+      aria-pressed="${isSelected ? "true" : "false"}"
+      ${isDisabled ? "disabled" : ""}
     >
       ${slotLabel}
     </button>
   `;
 }
 
-function bindMapArrows(container) {
-  const parkingColumnsContainer = container.querySelector(".parking-columns");
+function bindParkingSpotButtons(container) {
+  container.querySelectorAll(".parking-spot:not(:disabled)").forEach((button) => {
+    button.addEventListener("click", () => {
+      const zoneLabel = button.dataset.zone || "";
+      const spotNumber = Number(button.dataset.spotNumber);
 
-  container.querySelectorAll(".map-arrow").forEach((arrow) => {
-    arrow.addEventListener("click", () => {
-      const direction = arrow.dataset.direction === "left" ? -1 : 1;
-      parkingColumnsContainer?.scrollBy({
-        left: direction * 280,
-        behavior: "smooth"
-      });
+      if (!zoneLabel || !Number.isFinite(spotNumber)) {
+        return;
+      }
+
+      const clickedSpotKey = getSpotKey(zoneLabel, spotNumber);
+
+      if (parkingMapState.popupSpotKey === clickedSpotKey) {
+        closeSpotPopup();
+      } else {
+        openSpotPopup(zoneLabel, spotNumber);
+      }
     });
   });
+}
+
+function bindGateArrows(container) {
+  container.querySelectorAll(".map-arrow").forEach((arrow) => {
+    arrow.addEventListener("click", () => {
+      shiftParkingGate(arrow.dataset.direction === "left" ? -1 : 1);
+    });
+  });
+}
+
+function shiftParkingGate(step) {
+  const totalGates = parkingGateConfigs.length;
+
+  parkingMapState.currentGateIndex = (parkingMapState.currentGateIndex + step + totalGates) % totalGates;
+  saveGateIndex(parkingMapState.currentGateIndex);
+  closeSpotPopup();
+  renderParkingMapView(
+    parkingMapState.zones,
+    parkingMapState.zonesSignature,
+    parkingMapState.statusMessage,
+    parkingMapState.selectedSpotKey
+  );
+}
+
+// ── Gate auto-jump ────────────────────────────────────────────────────────────
+// Each gate owns a set of zones. Gate 1 = A,B,C,D,E,F (default).
+// If your layout changes per gate, adjust this map.
+const gateZoneMap = {
+  0: ["A", "B", "C", "D", "E", "F"], // Gate 1
+  1: ["A"],                            // Gate 2 (single zone per your screenshots)
+  2: ["A", "B", "C", "D", "E", "F"]  // Gate 3
+};
+
+function getGateIndexForSpotKey(spotKey) {
+  if (!spotKey) return null;
+  const zoneLabel = String(spotKey).split(":")[0].toUpperCase();
+  for (const [gateIdx, zones] of Object.entries(gateZoneMap)) {
+    if (zones.includes(zoneLabel)) {
+      // prefer the gate whose layout actually shows this zone
+      // fall back to gate 0 if ambiguous
+      return Number(gateIdx);
+    }
+  }
+  return null;
+}
+
+function autoJumpToGateForSpot(spotKey) {
+  if (!spotKey) return;
+  const billingRow = getBillingRowForSpot(spotKey);
+  // If there's a gate field on the billing row, use it directly
+  if (billingRow && billingRow.gate != null) {
+    const idx = Number(billingRow.gate) - 1;
+    if (idx >= 0 && idx < parkingGateConfigs.length) {
+      parkingMapState.currentGateIndex = idx;
+      saveGateIndex(idx);
+      return;
+    }
+  }
+  // Otherwise derive from zone label — Gate 2 only has zone A in the screenshots
+  // so we default to Gate 1 for multi-zone spots
+  // You can refine this map as your data grows
+}
+
+// ── Billing row lookup ────────────────────────────────────────────────────────
+function getBillingRowForSpot(spotKey) {
+  if (!spotKey || !parkingMapState.billingRows.length) return null;
+  const [zone, num] = String(spotKey).split(":");
+  const slotLabel = `${zone}${formatSlotNumber(Number(num))}`;
+  
+  const matchingRows = parkingMapState.billingRows
+    .filter((r) => String(r.slot || "").trim().toUpperCase() === slotLabel.toUpperCase());
+
+  if (matchingRows.length === 0) return null;
+
+  return matchingRows.reduce((latest, current) => {
+    const currentTimestamp = current.timestamp || parseSelectionTimestamp(current.date, current.checkIn);
+    const latestTimestamp = latest ? (latest.timestamp || parseSelectionTimestamp(latest.date, latest.checkIn)) : Number.NEGATIVE_INFINITY;
+    
+    return currentTimestamp > latestTimestamp ? current : latest;
+  }, null);
+}
+
+// ── Popup ─────────────────────────────────────────────────────────────────────
+let popupDurationInterval = null;
+
+function openSpotPopup(zoneLabel, spotNumber) {
+  const spotKey = getSpotKey(zoneLabel, spotNumber);
+  parkingMapState.popupSpotKey = spotKey;
+
+  const row = getBillingRowForSpot(spotKey);
+  const slotLabel = `${zoneLabel}${formatSlotNumber(spotNumber)}`;
+
+  // Remove any existing popup
+  closeSpotPopup();
+
+  const popup = document.createElement("div");
+  popup.className = "spot-popup";
+  popup.id = "spot-popup";
+  popup.setAttribute("role", "dialog");
+  popup.setAttribute("aria-label", `Details for slot ${slotLabel}`);
+
+  const plateText = row?.number || "—";
+  const checkInText = row?.checkIn || "—";
+  const studentId = "2353100"; // static from design; could come from profile
+
+  popup.innerHTML = `
+    <button class="spot-popup-close" type="button" aria-label="Close">&times;</button>
+    <div class="spot-popup-title">#${slotLabel} - ${plateText}</div>
+    <div class="spot-popup-student">Student ID: ${studentId}</div>
+    <div class="spot-popup-grid">
+      <div class="spot-popup-field">
+        <span class="spot-popup-label">Check in</span>
+        <strong class="spot-popup-value">${checkInText}</strong>
+      </div>
+      <div class="spot-popup-field">
+        <span class="spot-popup-label">Duration</span>
+        <strong class="spot-popup-value" id="popup-duration">—</strong>
+      </div>
+    </div>
+  `;
+
+  // Position popup near parking-lower
+  const container = document.querySelector("#parking-lower");
+  if (container) {
+    container.style.position = "relative";
+    container.appendChild(popup);
+  } else {
+    document.body.appendChild(popup);
+  }
+
+  popup.querySelector(".spot-popup-close").addEventListener("click", closeSpotPopup);
+
+  // Start live duration ticker
+  startDurationTicker(row);
+}
+
+function closeSpotPopup() {
+  const existing = document.getElementById("spot-popup");
+  if (existing) existing.remove();
+  clearInterval(popupDurationInterval);
+  popupDurationInterval = null;
+  parkingMapState.popupSpotKey = "";
+}
+
+function startDurationTicker(row) {
+  clearInterval(popupDurationInterval);
+
+  function updateDuration() {
+    const el = document.getElementById("popup-duration");
+    if (!el) { clearInterval(popupDurationInterval); return; }
+
+    let durationMs;
+    const hasCheckOut = row && row.checkOut && row.checkOut !== "--";
+
+    if (row && row.checkInMinutes != null) {
+      const nowMs = Date.now();
+      if (hasCheckOut) {
+        durationMs = (row.durationMinutes || 0) * 60 * 1000;
+      } else {
+        const rowDateMs = parseDateLikeValue(row.date);
+        let baseDateMs = Number.isFinite(rowDateMs) ? rowDateMs : new Date().setHours(0,0,0,0);
+        const checkInMs = baseDateMs + row.checkInMinutes * 60 * 1000;
+        durationMs = Math.max(0, nowMs - checkInMs);
+      }
+    } else {
+      el.textContent = "—";
+      return;
+    }
+
+    const totalSeconds = Math.floor(durationMs / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    if (hasCheckOut) {
+      el.textContent = `${hours}h ${String(minutes).padStart(2, "0")}m`;
+    } else {
+      el.textContent = `${hours}h ${String(minutes).padStart(2, "0")}m ${String(seconds).padStart(2, "0")}s`;
+    }
+  }
+
+  updateDuration();
+  if (!(row?.checkOut && row.checkOut !== "--")) {
+    popupDurationInterval = setInterval(updateDuration, 1000);
+  }
 }
 
 function formatSlotNumber(value) {
@@ -819,6 +1184,8 @@ function initLoginForm() {
     };
 
     localStorage.setItem(storageKey, JSON.stringify(profile));
+    sessionStorage.setItem(navModeKey, "authenticated");
+    recordTodayLoginActivity();
     note.textContent = "Demo sign in successful. Redirecting to the parking map...";
 
     window.setTimeout(() => {
@@ -947,6 +1314,7 @@ function bindProfileActions() {
 
   logoutButton.addEventListener("click", () => {
     sessionStorage.removeItem(navModeKey);
+    clearSavedSelectedSpotKey();
     window.location.href = "index.html";
   });
 }
@@ -1072,7 +1440,21 @@ function normalizeBillingWorkbookRow(row, index) {
     return null;
   }
 
-  const [rawDate, rawCheckIn, rawCheckOut, rawFee, rawSlot] = row;
+  const rawDate = row[0];
+  const rawCheckIn = row[1];
+  const rawCheckOut = row[2];
+  const rawFee = row[3];
+  const rawSlot = row[4];
+  
+  let rawGate = null;
+  let rawNumber = null;
+  if (row.length >= 7) {
+    rawGate = row[5];
+    rawNumber = row[6];
+  } else {
+    rawNumber = row[5];
+  }
+
   const fee = normalizeFeeValue(rawFee);
   const checkInMinutes = extractTimeTotalMinutes(rawCheckIn);
   const checkOutMinutes = extractTimeTotalMinutes(rawCheckOut);
@@ -1080,7 +1462,9 @@ function normalizeBillingWorkbookRow(row, index) {
   const formattedCheckIn = formatWorkbookTimeValue(rawCheckIn);
   const formattedCheckOut = formatWorkbookTimeValue(rawCheckOut);
 
-  if (fee === null || fee < 100) {
+  const isActiveSession = checkInMinutes !== null && checkOutMinutes === null;
+  
+  if (!isActiveSession && (fee === null || fee < 100)) {
     return null;
   }
 
@@ -1088,9 +1472,14 @@ function normalizeBillingWorkbookRow(row, index) {
     date: formattedDate,
     checkIn: formattedCheckIn,
     checkOut: formattedCheckOut,
+    rawCheckOut: rawCheckOut,
     fee: fee ?? 0,
     durationMinutes: computeDurationMinutes(checkInMinutes, checkOutMinutes),
-    slot: String(rawSlot || "").trim()
+    checkInMinutes,
+    slot: String(rawSlot || "").trim(),
+    gate: rawGate != null ? String(rawGate).trim() : null,
+    number: String(rawNumber || "").trim(),
+    timestamp: parseSelectionTimestamp(rawDate, rawCheckIn)
   };
 
   if (!normalizedRow.date && normalizedRow.checkIn === "--" && normalizedRow.checkOut === "--") {
@@ -1246,7 +1635,7 @@ function extractTimeTotalMinutes(value) {
 
   if (typeof value === "string") {
     const trimmed = value.trim().toLowerCase();
-    const match = trimmed.match(/^(\d{1,2}):(\d{2})(?:\s*([ap]m))?$/);
+    const match = trimmed.match(/^(\d{1,2}):(\d{2})(?::\d{2})?(?:\s*([ap]m))?$/);
     if (!match) {
       return null;
     }
@@ -1430,13 +1819,34 @@ function parseDayKey(dayKey) {
   return new Date(year, month - 1, day);
 }
 
+function recordTodayLoginActivity() {
+  const todayKey = formatDayKey(new Date());
+  const activity = readLoginActivity();
+
+  if (activity.includes(todayKey)) {
+    return;
+  }
+
+  activity.push(todayKey);
+  activity.sort();
+  localStorage.setItem(loginActivityKey, JSON.stringify(activity));
+}
+
+function formatDayKey(date) {
+  return `${date.getFullYear()}-${formatSlotNumber(date.getMonth() + 1)}-${formatSlotNumber(date.getDate())}`;
+}
+
 function startOfDay(date) {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
 function syncSidebarAvatar(profile) {
-  document.querySelectorAll(".sidebar-avatar span").forEach((node) => {
-    node.textContent = profile.initials || "J";
+  document.querySelectorAll(".sidebar-avatar").forEach((node) => {
+    if (profile.avatar) {
+      node.innerHTML = `<img src="${profile.avatar}" alt="Avatar" style="width:42px;height:42px;min-width:42px;min-height:42px;max-width:42px;max-height:42px;object-fit:cover;border-radius:50%;display:block;aspect-ratio:1">`;
+    } else {
+      node.innerHTML = `<span>${profile.initials || "J"}</span>`;
+    }
   });
 }
 

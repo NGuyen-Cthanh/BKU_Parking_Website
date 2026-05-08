@@ -24,7 +24,7 @@ const translations = {
     "common.technician": "Technician",
     "common.contactUs": "Contact Us",
     "common.privacyPolicy": "Privacy Policy",
-    "common.termsOfService": "Terms of service",
+    "common.termsOfService": "Terms of Service",
     "common.emailLabel": "Email:",
     "common.telLabel": "Tel:",
     "common.homePage": "Home Page",
@@ -43,15 +43,19 @@ const translations = {
     "landing.legend.selected": "Selected",
     "landing.legend.unavailable": "Unavailable (1)",
     "landing.footerDescription": "Park smarter, save time on campus, and keep your parking status visible from one place.",
-    "landing.footerCopyrightHtml": "Copyright 2026 TA NBINHTAINANGTEAM<br>All rights reserved.",
+    "landing.footerCopyrightHtml": "Copyright 2026 TANBINHTAINANGTEAM<br>All rights reserved.",
     "landing.loadingParkingData": "Loading live Excel data from {source}...",
     "landing.liveSyncStatus": "Live sync active from {source} ({sheetName}). {selectionMessage} Last check {time}.",
     "landing.selectedSlotSynced": "Latest selected slot synced from {source}.",
+    "landing.selectedSlotManual": "Selected slot {slot} on this device.",
     "landing.selectedSlotFallback": "Latest selected slot unavailable. Showing fallback selection.",
     "landing.parkingDataUnavailable": "Could not read {source} live yet.",
     "landing.fallbackParkingData": "{protocolHint} Showing fallback data until the workbook becomes reachable.",
     "landing.waitingParkingRefresh": "{protocolHint} Waiting to refresh after the next Excel save.",
     "landing.watchingParkingWorkbook": "Watching {source}. Waiting for a readable saved workbook...",
+    "landing.aria.available": "available",
+    "landing.aria.selected": "selected",
+    "landing.aria.unavailable": "unavailable",
     "login.welcomeBack": "Welcome Back",
     "login.subtitle": "Please log in to continue",
     "login.emailAddress": "Email Address",
@@ -71,14 +75,14 @@ const translations = {
     "settings.activeTime": "Active time",
     "settings.profilePhoto": "Profile Photo",
     "settings.uploadPhoto": "Upload Photo",
-    "settings.remove": "remove",
+    "settings.remove": "Remove",
     "settings.imageRequirements": "Image requirements:",
     "settings.reqMin": "Min. 400 x 400px",
     "settings.reqMax": "Max. 2MB",
     "settings.reqFace": "Your face or company logo",
     "settings.loginState": "Login state",
     "settings.active": "Active",
-    "settings.unactive": "Unactive",
+    "settings.unactive": "Inactive",
     "settings.userDetails": "User Details",
     "settings.firstName": "First Name",
     "settings.lastName": "Last Name",
@@ -93,7 +97,7 @@ const translations = {
     "settings.logout": "Log Out",
     "settings.successSaved": "Successfully Saved.",
     "settings.successSavedMessage": "Your profile settings have been saved.",
-    "billing.tableTitle": "Title ↓",
+    "billing.tableTitle": "Name ↓",
     "billing.date": "Date",
     "billing.checkIn": "Check in",
     "billing.checkOut": "Check out",
@@ -143,7 +147,7 @@ const translations = {
     "common.copyrightHtml": "Bản quyền &copy; 2026 TANBINHTAINANGTEAM<br>Tất cả quyền được bảo lưu.",
     "common.localServerRequired": "Đồng bộ Excel trực tiếp cần chạy bằng máy chủ cục bộ. Hãy mở dự án bằng VS Code Live Server hoặc máy chủ web cục bộ khác.",
     "landing.heroLine1": "Đỗ xe thông minh hơn, đỡ mất thời gian hơn.",
-    "landing.heroLine2": "Xem trực tiếp từng khu, đếm chỗ từ trên xuống và chọn chỗ trống nhanh hơn.",
+    "landing.heroLine2": "Xem trực tiếp từng khu, đếm chỗ từ trên xuống, và chọn chỗ trống nhanh hơn.",
     "landing.mapTitle": "Bản đồ bãi xe",
     "landing.mapDescription": "Vui lòng theo dõi bản đồ bãi xe thời gian thực để tìm chỗ đậu nhanh hơn và xem số thứ tự của từng khu từ trên xuống dưới.",
     "landing.lotTitle": "Bãi xe cổng 1",
@@ -153,15 +157,19 @@ const translations = {
     "landing.legend.selected": "Đã chọn",
     "landing.legend.unavailable": "Không trống (1)",
     "landing.footerDescription": "Đỗ xe thông minh hơn, tiết kiệm thời gian trong khuôn viên và theo dõi trạng thái bãi xe ở một nơi.",
-    "landing.footerCopyrightHtml": "Bản quyền 2026 TA NBINHTAINANGTEAM<br>Tất cả quyền được bảo lưu.",
+    "landing.footerCopyrightHtml": "Bản quyền 2026 TANBINHTAINANGTEAM<br>Tất cả quyền được bảo lưu.",
     "landing.loadingParkingData": "Đang tải dữ liệu Excel trực tiếp từ {source}...",
     "landing.liveSyncStatus": "Đồng bộ trực tiếp từ {source} ({sheetName}). {selectionMessage} Cập nhật lúc {time}.",
     "landing.selectedSlotSynced": "Ô đã chọn mới nhất được đồng bộ từ {source}.",
+    "landing.selectedSlotManual": "Đã chọn ô {slot} trên thiết bị này.",
     "landing.selectedSlotFallback": "Không lấy được ô đã chọn mới nhất. Đang dùng dữ liệu dự phòng.",
     "landing.parkingDataUnavailable": "Chưa thể đọc dữ liệu trực tiếp từ {source}.",
     "landing.fallbackParkingData": "{protocolHint} Đang hiển thị dữ liệu dự phòng cho đến khi có thể truy cập workbook.",
     "landing.waitingParkingRefresh": "{protocolHint} Đang chờ làm mới sau lần lưu Excel tiếp theo.",
     "landing.watchingParkingWorkbook": "Đang theo dõi {source}. Chờ workbook được lưu ở trạng thái có thể đọc...",
+    "landing.aria.available": "còn trống",
+    "landing.aria.selected": "đã chọn",
+    "landing.aria.unavailable": "không trống",
     "login.welcomeBack": "Chào mừng trở lại",
     "login.subtitle": "Vui lòng đăng nhập để tiếp tục",
     "login.emailAddress": "Địa chỉ email",
@@ -181,7 +189,7 @@ const translations = {
     "settings.activeTime": "Số lần hoạt động",
     "settings.profilePhoto": "Ảnh hồ sơ",
     "settings.uploadPhoto": "Tải ảnh lên",
-    "settings.remove": "xóa",
+    "settings.remove": "Xóa",
     "settings.imageRequirements": "Yêu cầu hình ảnh:",
     "settings.reqMin": "Tối thiểu 400 x 400px",
     "settings.reqMax": "Tối đa 2MB",
@@ -359,8 +367,7 @@ function ensureLanguageStyles() {
       color: #1d4ed8;
       font-weight: 700;
     }
-    .bku-language-host[data-language-layout="landing"] .bku-language-button,
-    .bku-language-host[data-language-layout="login"] .bku-language-button {
+    .bku-language-host[data-language-layout="landing"] .bku-language-button {
       min-height: auto;
       padding: 0;
       border: 0;
@@ -372,13 +379,32 @@ function ensureLanguageStyles() {
       font-weight: inherit;
     }
     .bku-language-host[data-language-layout="landing"] .bku-language-menu {
-      right: 0;
+      left: 0;
+      right: auto;
       bottom: calc(100% + 10px);
     }
     .bku-language-host[data-language-layout="login"] .bku-language-menu {
       top: calc(100% + 10px);
       right: 0;
       bottom: auto;
+    }
+    /* Settings sidebar: stick translator to bottom */
+    .bku-language-host[data-language-layout="settings"] {
+      display: flex;
+      justify-content: flex-start;
+      width: 100%;
+      padding: 16px 12px;
+      margin-top: auto;
+      border-top: 1px solid rgba(148, 163, 184, 0.2);
+    }
+    .bku-language-host[data-language-layout="settings"] .bku-language-menu {
+      left: 0;
+      right: auto;
+      bottom: calc(100% + 8px);
+    }
+    /* Landing hero text: force left alignment */
+    .hero-text-block {
+      text-align: left !important;
     }
   `;
   document.head.appendChild(style);
@@ -501,7 +527,6 @@ function applySettingsHomeTranslations() {
   document.title = t("title.settingsHome");
   setText(document.querySelector(".brand-text"), "common.brand");
   setPlaceholder(document.querySelector(".sidebar-search input"), "common.searchPlaceholder");
-  const navTexts = document.querySelectorAll(".sidebar-nav .nav-item > span:last-child, .sidebar-nav .nav-item > span:nth-child(2)");
   setText(document.querySelectorAll(".sidebar-nav .nav-item")[0].querySelector("span:last-child"), "settings.nav.home");
   setText(document.querySelectorAll(".sidebar-nav .nav-item")[1].querySelector("span:last-child"), "settings.nav.billing");
   setText(document.querySelectorAll(".sidebar-nav .nav-item")[2].querySelector("span:nth-of-type(2)"), "settings.nav.setting");

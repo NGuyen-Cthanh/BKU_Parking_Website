@@ -98,11 +98,12 @@ body {
 </div>
 </main>
 <!-- END: LoginContainer -->
-<script defer src="./scripts/i18n.js?v=20260424-06"></script>
+<script defer src="./scripts/i18n.js?v=20260508-02"></script>
 <script data-purpose="toggle-password">
     // Minimal logic for the password eye icon toggle
     const navModeKey = "bkuParkingNavMode";
     const storageKey = "bkuParkingProfile";
+    const loginActivityKey = "bkuParkingLoginActivity";
     const defaultProfile = {
       firstName: "Thanh",
       lastName: "Nguyen Kong Thenh",
@@ -163,11 +164,33 @@ body {
 
         localStorage.setItem(storageKey, JSON.stringify(profile));
         sessionStorage.setItem(navModeKey, 'authenticated');
+        recordTodayLoginActivity();
         if (loginNote) {
           loginNote.textContent = "";
         }
         window.location.href = './index.html';
       });
+    }
+
+    function recordTodayLoginActivity() {
+      const today = new Date();
+      const todayKey = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+      const savedDays = (() => {
+        try {
+          const parsed = JSON.parse(localStorage.getItem(loginActivityKey) || "[]");
+          return Array.isArray(parsed) ? parsed.filter((day) => typeof day === "string") : [];
+        } catch {
+          return [];
+        }
+      })();
+
+      if (savedDays.includes(todayKey)) {
+        return;
+      }
+
+      savedDays.push(todayKey);
+      savedDays.sort();
+      localStorage.setItem(loginActivityKey, JSON.stringify(savedDays));
     }
   </script>
 </body></html>

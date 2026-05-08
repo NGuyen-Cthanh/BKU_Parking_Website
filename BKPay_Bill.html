@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parking Fee - BKU Parking</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+    body {
+      font-family: "Inter", sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-[#f8f9fc] text-gray-900" data-page="bkpay-bill">
+<header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm h-16">
+    <div class="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <img alt="BKU Logo" class="w-10 h-10 object-contain" src="./assets/images/logo.png">
+        <span class="text-xl font-bold text-gray-800">BKU Parking</span>
+      </div>
+
+      <nav class="hidden md:flex items-center space-x-8 font-medium">
+        <a class="hover:text-blue-700 transition-colors" href="./index.html">Home</a>
+        <a class="hover:text-blue-700 transition-colors" href="./index.html#landscape-map">Map</a>
+        <a class="hover:text-blue-700 transition-colors" href="./BKPay_Bill.html">BKPay</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button class="text-gray-600 hover:text-blue-700" type="button" aria-label="Search">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+          </svg>
+        </button>
+
+        <div class="h-5 w-px bg-gray-300"></div>
+
+        <div class="hidden items-center gap-3" id="auth-nav-actions">
+          <a aria-label="Open account settings" class="h-8 w-8 overflow-hidden rounded-full hover:opacity-90 transition-opacity border border-gray-200" href="./settings-home.html">
+            <img alt="Account avatar" class="h-full w-full object-cover" id="auth-avatar" src="./assets/images/thanh-avatar.svg">
+          </a>
+          <span class="text-sm font-medium text-gray-800" id="auth-label">Thanh</span>
+        </div>
+
+        <div class="flex items-center gap-2" id="default-nav-actions">
+          <a class="flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors" href="./login.html">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+            <span>Login</span>
+          </a>
+          <a class="flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-700 px-3 py-1.5 rounded-lg border border-blue-200 hover:border-blue-400 hover:bg-blue-50 transition-colors" href="./login.html">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+            <span>Sign Up</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="min-h-[calc(100vh-320px)] flex flex-col items-center py-20 px-4 bg-white mt-16" data-purpose="fee-section">
+    <h1 class="text-4xl md:text-5xl font-bold mb-12 text-center text-gray-900">Parking Fee</h1>
+    
+    <div class="w-full max-w-5xl border border-gray-200 rounded-sm overflow-hidden bg-white shadow-sm mb-12">
+      <table class="w-full text-left border-collapse">
+        <thead class="bg-[#f0f4f8] border-b border-gray-200 text-sm font-semibold text-gray-800">
+          <tr>
+            <th class="px-6 py-4 font-semibold w-1/4">Title <span class="text-gray-500 font-normal">↓</span></th>
+            <th class="px-6 py-4 font-semibold w-1/4">Semester</th>
+            <th class="px-6 py-4 font-semibold w-1/4">Total Bill</th>
+            <th class="px-6 py-4 font-semibold w-1/4">Status</th>
+          </tr>
+        </thead>
+        <tbody class="text-sm text-gray-700" id="fee-table-body">
+          <tr class="border-b border-gray-100 hover:bg-gray-50">
+            <td class="px-6 py-5 flex items-center gap-4">
+              <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center border border-gray-200 overflow-hidden">
+                 <img src="./assets/images/thanh-avatar.svg" alt="avatar" class="w-full h-full object-cover bill-avatar">
+              </div>
+              <span class="font-medium text-gray-900 bill-name">Jane Doe</span>
+            </td>
+            <td class="px-6 py-5 text-gray-700 font-medium">252</td>
+            <td class="px-6 py-5 text-gray-700 font-medium" id="semester-252-total">Loading...</td>
+            <td class="px-6 py-5">
+              <div class="flex items-center justify-between">
+                <span class="text-gray-600">Unpaid</span>
+                <input type="checkbox" id="pay-checkbox" class="w-6 h-6 border-gray-300 rounded text-blue-600 focus:ring-blue-500 cursor-pointer">
+              </div>
+            </td>
+          </tr>
+          <tr class="border-b border-gray-100 hover:bg-gray-50">
+            <td class="px-6 py-5 flex items-center gap-4">
+              <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center border border-gray-200 overflow-hidden">
+                 <img src="./assets/images/thanh-avatar.svg" alt="avatar" class="w-full h-full object-cover bill-avatar">
+              </div>
+              <span class="font-medium text-gray-900 bill-name">Jane Doe</span>
+            </td>
+            <td class="px-6 py-5 text-gray-700 font-medium">251</td>
+            <td class="px-6 py-5 text-gray-700 font-medium">78.000 VND</td>
+            <td class="px-6 py-5">
+              <div class="flex items-center justify-between">
+                <span class="text-gray-600">Done</span>
+                <div class="w-6 h-6"></div> <!-- Placeholder for alignment -->
+              </div>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-6 py-5 flex items-center gap-4">
+              <div class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center border border-gray-200 overflow-hidden">
+                 <img src="./assets/images/thanh-avatar.svg" alt="avatar" class="w-full h-full object-cover bill-avatar">
+              </div>
+              <span class="font-medium text-gray-900 bill-name">Jane Doe</span>
+            </td>
+            <td class="px-6 py-5 text-gray-700 font-medium">242</td>
+            <td class="px-6 py-5 text-gray-700 font-medium">60.000 VND</td>
+            <td class="px-6 py-5">
+              <div class="flex items-center justify-between">
+                <span class="text-gray-600">Done</span>
+                <div class="w-6 h-6"></div> <!-- Placeholder for alignment -->
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <div class="mt-4 flex justify-center w-full">
+      <button id="pay-button" disabled class="px-14 py-3 border-[1.5px] border-blue-500 text-blue-500 font-semibold text-lg bg-white rounded transition-colors inline-flex items-center justify-center disabled:opacity-60 disabled:cursor-not-allowed">
+        Pay the bill
+      </button>
+    </div>
+  </main>
+
+  <footer class="bg-[#f0f4f8] py-16 px-6">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-3 mb-6">
+          <img alt="BKU Logo" class="w-10 h-10 object-contain" src="./assets/images/logo.png">
+          <h4 class="text-2xl font-bold text-gray-800">BKU Parking</h4>
+        </div>
+        <p class="text-gray-600 text-sm max-w-sm mb-8 leading-relaxed">
+          Quý Thầy/Cô chưa có tài khoản (hoặc quên mật khẩu) nhà trường vui lòng liên hệ Trung tâm Dữ liệu & Công nghệ Thông tin, nhà A5 - phòng 107 để được hỗ trợ.
+        </p>
+        <p class="text-xs text-gray-500">
+          Copyright © 2026 TANBINHTAINANGTEAM<br>
+          All right reserved.
+        </p>
+      </div>
+
+      <div>
+        <h5 class="text-lg font-bold text-gray-800 mb-6">Technician</h5>
+        <div class="space-y-4 text-sm">
+          <div>
+            <p class="text-gray-500 mb-1">Email:</p>
+            <p class="text-gray-800 font-medium">mailcanhan@hcmut.edu.vn</p>
+          </div>
+          <div>
+            <p class="text-gray-500 mb-1">Tel:</p>
+            <p class="text-gray-800 font-medium">(84) 68.6868.6868</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h5 class="text-lg font-bold text-gray-800 mb-6">Help</h5>
+        <ul class="space-y-4 text-sm">
+          <li><a class="text-gray-800 hover:text-blue-700 transition-colors font-medium" href="./settings-home.html">Contact Us</a></li>
+          <li><a class="text-gray-800 hover:text-blue-700 transition-colors font-medium" href="./settings-bill.html">Privacy Policy</a></li>
+          <li><a class="text-gray-800 hover:text-blue-700 transition-colors font-medium" href="./login.html">Terms of service</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script src="./scripts/i18n.js?v=20260508-02"></script>
+  <!-- We include site.js here so we can reuse loadBillingInfoFromWorkbook and formatting functions -->
+  <script src="./scripts/site.js?v=20260508-02"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // 1. Fill profile data
+      const savedProfile = (() => {
+        try {
+          return JSON.parse(localStorage.getItem('bkuParkingProfile') || "{}");
+        } catch {
+          return {};
+        }
+      })();
+      
+      const displayName = savedProfile.firstName && savedProfile.lastName ? `${savedProfile.firstName} ${savedProfile.lastName}` : 'Jane Doe';
+      const shortName = savedProfile.firstName || 'Jane';
+      const avatarSrc = savedProfile.avatar || './assets/images/thanh-avatar.svg';
+
+      document.querySelectorAll('.bill-name').forEach(el => el.textContent = displayName);
+      document.querySelectorAll('.bill-avatar').forEach(el => el.src = avatarSrc);
+
+      // 2. Fetch total fee for semester 252 (matching settings-bill.html)
+      // Since site.js is loaded, we can reuse its global functions
+      async function loadFee() {
+        let totalFee = 0;
+        try {
+          const liveData = await loadBillingInfoFromWorkbook();
+          totalFee = liveData.rows.reduce((sum, row) => sum + (Number(row.fee) || 0), 0);
+        } catch (error) {
+          const fallbackRows = readFallbackBillingRows();
+          totalFee = fallbackRows.reduce((sum, row) => sum + (Number(row.fee) || 0), 0);
+        }
+        
+        // Use formatVnd if available, else manual format
+        if (typeof formatVnd === 'function') {
+          document.getElementById('semester-252-total').textContent = formatVnd(totalFee);
+        } else {
+          // Fallback manual formatter just in case
+          const formatted = new Intl.NumberFormat('vi-VN').format(totalFee);
+          document.getElementById('semester-252-total').textContent = `${formatted} VND`;
+        }
+      }
+      loadFee();
+
+      // 3. Handle Checkbox interaction
+      const checkbox = document.getElementById('pay-checkbox');
+      const payBtn = document.getElementById('pay-button');
+
+      checkbox.addEventListener('change', (e) => {
+        if (e.target.checked) {
+          payBtn.disabled = false;
+          payBtn.classList.remove('bg-white', 'text-blue-500', 'opacity-60', 'cursor-not-allowed');
+          payBtn.classList.add('bg-blue-500', 'text-white', 'hover:bg-blue-600', 'border-blue-600');
+        } else {
+          payBtn.disabled = true;
+          payBtn.classList.add('bg-white', 'text-blue-500', 'opacity-60', 'cursor-not-allowed');
+          payBtn.classList.remove('bg-blue-500', 'text-white', 'hover:bg-blue-600', 'border-blue-600');
+        }
+      });
+
+      payBtn.addEventListener('click', () => {
+        if (checkbox.checked) {
+          window.location.href = './BKPay.html';
+        }
+      });
+    });
+  </script>
+  <script>
+    (() => {
+      const landingNavModeKey = "bkuParkingNavMode";
+      const landingProfileKey = "bkuParkingProfile";
+      const defaultNavActions = document.querySelector("#default-nav-actions");
+      const authNavActions = document.querySelector("#auth-nav-actions");
+      const authAvatar = document.querySelector("#auth-avatar");
+      const authLabel = document.querySelector("#auth-label");
+      const authState = sessionStorage.getItem(landingNavModeKey);
+
+      function showActions(target) {
+        defaultNavActions?.classList.add("hidden");
+        authNavActions?.classList.add("hidden");
+        defaultNavActions?.classList.remove("flex");
+        authNavActions?.classList.remove("flex");
+        target?.classList.remove("hidden");
+        target?.classList.add("flex");
+      }
+
+      if (authState === "authenticated") {
+        const savedProfile = (() => {
+          try {
+            return JSON.parse(localStorage.getItem(landingProfileKey) || "{}");
+          } catch {
+            return {};
+          }
+        })();
+        if (savedProfile.avatar && authAvatar) {
+          authAvatar.src = savedProfile.avatar;
+        }
+        if (savedProfile.firstName && authLabel) {
+          authLabel.textContent = savedProfile.firstName;
+        }
+        showActions(authNavActions);
+      } else {
+        showActions(defaultNavActions);
+      }
+    })();
+  </script>
+</body>
+</html>

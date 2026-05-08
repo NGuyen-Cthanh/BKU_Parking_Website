@@ -10,19 +10,9 @@
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link rel="stylesheet" href="styles/main.css">
   <style data-purpose="layout-styles">
-    .hero-text-block {
-      transform: translateY(-140px);
-    }
-
     .hero-text-style {
       color: #ffffff;
-      text-shadow: 0 16px 8px rgba(0, 0, 0, 0.5);
-    }
-
-    @media (max-width: 768px) {
-      .hero-text-block {
-        transform: none;
-      }
+      text-shadow: 0 2px 16px rgba(0,0,0,0.5);
     }
   </style>
 </head>
@@ -37,52 +27,52 @@
       <nav class="hidden md:flex items-center space-x-8 font-medium">
         <a class="hover:text-blue-700 transition-colors" href="./index.html">Home</a>
         <a class="hover:text-blue-700 transition-colors" href="#landscape-map">Map</a>
-        <a class="hover:text-blue-700 transition-colors" href="./BKPay.html">BKPay</a>
+        <a class="hover:text-blue-700 transition-colors" href="./BKPay_Bill.html">BKPay</a>
       </nav>
 
-      <div class="flex items-center space-x-6">
+      <div class="flex items-center gap-3">
         <button class="text-gray-600 hover:text-blue-700" type="button" aria-label="Search">
-          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
           </svg>
         </button>
 
-        <div class="hidden items-center space-x-4" id="auth-nav-actions">
-          <div class="h-6 w-px bg-gray-300"></div>
-          <a aria-label="Open account settings" class="h-8 w-8 overflow-hidden rounded-full hover:opacity-90 transition-opacity" href="./settings-home.html">
+        <div class="h-5 w-px bg-gray-300"></div>
+
+        <div class="hidden items-center gap-3" id="auth-nav-actions">
+          <a aria-label="Open account settings" class="h-8 w-8 overflow-hidden rounded-full hover:opacity-90 transition-opacity border border-gray-200" href="./settings-home.html">
             <img alt="Account avatar" class="h-full w-full object-cover" id="auth-avatar" src="./assets/images/thanh-avatar.svg">
           </a>
           <span class="text-sm font-medium text-gray-800" id="auth-label">Thanh</span>
         </div>
 
-        <div class="flex items-center space-x-6" id="default-nav-actions">
-          <div class="h-6 w-px bg-gray-300"></div>
-          <a class="flex items-center gap-1 text-gray-700 hover:text-blue-700" href="./login.html">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-            </svg>
-            <span>login</span>
+        <div class="flex items-center gap-2" id="default-nav-actions">
+          <a class="flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors" href="./login.html">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+            <span>Login</span>
+          </a>
+          <a class="flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-700 px-3 py-1.5 rounded-lg border border-blue-200 hover:border-blue-400 hover:bg-blue-50 transition-colors" href="./login.html">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+            <span>Sign Up</span>
           </a>
         </div>
       </div>
     </div>
   </header>
 
-  <section class="relative h-[600px] mt-16 overflow-hidden">
-    <img alt="Campus Illustration" class="absolute inset-0 w-full h-full object-cover" src="./assets/images/BKU drawing_1.png">
-    <div class="absolute inset-0 bg-black/5 flex flex-col justify-center px-12 md:px-24">
-      <div class="max-w-xl hero-text-block">
-        <h1 class="text-[54px] font-black mb-6 hero-text-style">BKU Parking</h1>
-        <p class="text-[18px] leading-relaxed mb-1 hero-text-style">Park smarter, not harder.</p>
-        <p class="text-[18px] hero-text-style">See each zone live, count slots top-to-bottom, and choose a free spot faster.</p>
+  <section class="relative h-[480px] mt-16 overflow-hidden">
+    <img alt="Campus Illustration" class="absolute inset-0 w-full h-full object-cover object-center" src="./assets/images/BKU drawing_1.png">
+    <div class="absolute inset-0" style="background: linear-gradient(to right, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 45%, transparent 100%);"></div>
+    <div class="absolute inset-0 flex flex-col justify-start pt-16 px-14 md:px-20">
+      <div class="max-w-lg">
+        <h1 class="text-[52px] font-black mb-4 leading-tight hero-text-style">BKU Parking</h1>
+        <p class="text-[16px] font-semibold leading-relaxed mb-1 hero-text-style">Park smarter, not harder.</p>
+        <p class="text-[16px] font-semibold hero-text-style">Easily find a spot and save time every time you come to campus.</p>
       </div>
-
-      <div class="absolute bottom-8 left-12 flex items-center gap-2 text-sm text-gray-700 bg-white/50 px-2 py-1 rounded" data-purpose="language-selector" data-language-layout="landing">
-        <span>English (United States)</span>
-        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-        </svg>
-      </div>
+    </div>
+    <div class="absolute bottom-6 left-14 md:left-20" data-purpose="language-selector" data-language-layout="landing">
+      <span>English (United States)</span>
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
     </div>
   </section>
 
@@ -93,17 +83,6 @@
     </div>
 
     <div class="map-shell">
-      <div class="lot-summary">
-        <div>
-          <h3>Gate 1 Parking</h3>
-          <p class="lot-meta">
-            <span><strong id="parking-available-count">--</strong>/<strong id="parking-total-count">--</strong> <span id="parking-available-label">spots available</span></span>
-            <!-- <span class="meta-dot"></span> -->
-            <!-- <span>Zone numbers reset from 01 in each zone</span> -->
-          </p>
-        </div>
-      </div>
-
       <div class="parking-overview">
         <div aria-live="polite" class="parking-lower" id="parking-lower"></div>
         <p class="parking-status-note" id="parking-status-message">Loading live Excel data...</p>
@@ -112,19 +91,19 @@
       <div class="legend">
         <div class="legend-item">
           <span class="legend-swatch legend-zone">A</span>
-          <span>Zone</span>
+          <span>Zones</span>
         </div>
         <div class="legend-item">
-          <span class="legend-swatch legend-available">01</span>
-          <span>Available (0)</span>
+          <span class="legend-swatch legend-available">00</span>
+          <span>Available</span>
         </div>
         <div class="legend-item">
-          <span class="legend-swatch legend-selected">01</span>
+          <span class="legend-swatch legend-selected">00</span>
           <span>Selected</span>
         </div>
         <div class="legend-item">
-          <span class="legend-swatch legend-unavailable">01</span>
-          <span>Unavailable (1)</span>
+          <span class="legend-swatch legend-unavailable">00</span>
+          <span>Unavailable</span>
         </div>
       </div>
     </div>
@@ -191,7 +170,13 @@
       }
 
       if (authState === "authenticated") {
-        const savedProfile = JSON.parse(localStorage.getItem(landingProfileKey) || "{}");
+        const savedProfile = (() => {
+          try {
+            return JSON.parse(localStorage.getItem(landingProfileKey) || "{}");
+          } catch {
+            return {};
+          }
+        })();
         if (savedProfile.avatar && authAvatar) {
           authAvatar.src = savedProfile.avatar;
         }
@@ -205,7 +190,7 @@
     })();
   </script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script defer src="./scripts/i18n.js?v=20260424-06"></script>
-  <script defer src="./scripts/site.js?v=20260424-06"></script>
+  <script defer src="./scripts/i18n.js?v=20260508-02"></script>
+  <script defer src="./scripts/site.js?v=20260508-02"></script>
 </body>
 </html>
