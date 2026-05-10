@@ -111,7 +111,19 @@ body {
       password: "123456789",
       zone: "Gate 3",
       initials: "TN",
-      avatar: "./assets/images/thanh-avatar.svg"
+      avatar: "./assets/images/thanh-avatar.svg",
+      role: "student"
+    };
+
+    const adminProfile = {
+      firstName: "Admin",
+      lastName: "BKU Parking",
+      email: "admin@hcmut.edu.vn",
+      password: "admin123",
+      zone: "All Gates",
+      initials: "AD",
+      avatar: "./assets/images/thanh-avatar.svg",
+      role: "admin"
     };
     const togglePassword = document.querySelector('#toggle-password');
     const loginForm = document.querySelector('#login-form');
@@ -146,8 +158,21 @@ body {
         event.preventDefault();
         const email = emailInput?.value.trim().toLowerCase() || "";
         const password = passwordInput?.value || "";
-        const validEmail = String(savedProfile.email || defaultProfile.email).trim().toLowerCase();
-        const validPassword = String(savedProfile.password || defaultProfile.password);
+
+        // Check admin account first
+        if (email === adminProfile.email.toLowerCase() && password === adminProfile.password) {
+          localStorage.setItem(storageKey, JSON.stringify(adminProfile));
+          sessionStorage.setItem(navModeKey, 'authenticated');
+          sessionStorage.setItem('bkuParkingRole', 'admin');
+          recordTodayLoginActivity();
+          if (loginNote) loginNote.textContent = "";
+          window.location.href = './admin.html';
+          return;
+        }
+
+        // Check normal user account
+const validEmail = String(defaultProfile.email).trim().toLowerCase();
+const validPassword = String(defaultProfile.password);
 
         if (email !== validEmail || password !== validPassword) {
           if (loginNote) {
@@ -156,18 +181,12 @@ body {
           return;
         }
 
-        const profile = {
-          ...savedProfile,
-          email: savedProfile.email,
-          password: savedProfile.password
-        };
-
+        const profile = { ...savedProfile, role: "student" };
         localStorage.setItem(storageKey, JSON.stringify(profile));
         sessionStorage.setItem(navModeKey, 'authenticated');
+        sessionStorage.setItem('bkuParkingRole', 'student');
         recordTodayLoginActivity();
-        if (loginNote) {
-          loginNote.textContent = "";
-        }
+        if (loginNote) loginNote.textContent = "";
         window.location.href = './index.html';
       });
     }

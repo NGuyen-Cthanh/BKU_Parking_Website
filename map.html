@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>BKU Parking - Parking Map</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="stylesheet" href="styles/main.css">
+
+  <style>
+    /* Required so the canvas overlay positions relative to the image block */
+    .parking-gate-map-block {
+      position: relative;
+      display: flex;
+      justify-content: center; /* Helps center the image */
+    }
+    /* Canvas sits exactly over the image */
+    #route-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="font-sans text-gray-900 bg-white" data-page="landing">
+
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm h-16">
+    <div class="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <img alt="BKU Logo" class="w-10 h-10 object-contain" src="./assets/images/logo.png">
+        <span class="text-xl font-bold text-gray-800">BKU Parking</span>
+      </div>
+      <nav class="hidden md:flex items-center space-x-8 font-medium">
+        <a class="hover:text-blue-700 transition-colors" href="./index.html">Home</a>
+        <a class="text-blue-700 font-semibold transition-colors" href="./map.html">Map</a>
+        <a class="hover:text-blue-700 transition-colors" href="./BKPay_Bill.html">BKPay</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <div class="h-5 w-px bg-gray-300"></div>
+        <div class="hidden items-center gap-3" id="auth-nav-actions">
+          <a aria-label="Open account settings" class="h-8 w-8 overflow-hidden rounded-full hover:opacity-90 transition-opacity border border-gray-200" href="./settings-home.html">
+            <img alt="Account avatar" class="h-full w-full object-cover" id="auth-avatar" src="./assets/images/thanh-avatar.svg">
+          </a>
+          <span class="text-sm font-medium text-gray-800" id="auth-label">Thanh</span>
+        </div>
+        <div class="flex items-center gap-2" id="default-nav-actions">
+          <a class="flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors" href="./login.html">
+            <span>Login</span>
+          </a>
+          <a class="flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-700 px-3 py-1.5 rounded-lg border border-blue-200 hover:border-blue-400 hover:bg-blue-50 transition-colors" href="./login.html">
+            <span>Sign Up</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="map-section mt-16" id="landscape-map">
+    <div class="section-intro">
+      <h2>Landscape Map</h2>
+      <p>Please observe the real-time parking map to find a parking spot faster and see each zone numbered from top to bottom.</p>
+    </div>
+    <div class="map-shell">
+      <div class="parking-overview">
+        <div aria-live="polite" class="parking-lower" id="parking-lower"></div>
+        <p class="parking-status-note" id="parking-status-message">Loading live Excel data...</p>
+      </div>
+      <div class="legend">
+        <div class="legend-item"><span class="legend-swatch legend-zone">A</span><span>Zones</span></div>
+        <div class="legend-item"><span class="legend-swatch legend-available">00</span><span>Available</span></div>
+        <div class="legend-item"><span class="legend-swatch legend-selected">00</span><span>Selected</span></div>
+        <div class="legend-item"><span class="legend-swatch legend-unavailable">00</span><span>Unavailable</span></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-[#f0f4f8] py-16 px-6">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-3 mb-6">
+          <img alt="BKU Logo" class="w-10 h-10 object-contain" src="./assets/images/logo.png">
+          <h4 class="text-2xl font-bold text-gray-800">BKU Parking</h4>
+        </div>
+        <p class="text-gray-600 text-sm max-w-sm mb-8 leading-relaxed">Park smarter, save time on campus, and keep your parking status visible from one place.</p>
+        <p class="text-xs text-gray-500">Copyright © 2026 TANBINHTAINANGTEAM<br>All rights reserved.</p>
+      </div>
+      <div>
+        <h5 class="text-lg font-bold text-gray-800 mb-6">Technician</h5>
+        <div class="space-y-4 text-sm">
+          <div><p class="text-gray-500 mb-1">Email:</p><p class="text-gray-800 font-medium">mailcanhan@hcmut.edu.vn</p></div>
+          <div><p class="text-gray-500 mb-1">Tel:</p><p class="text-gray-800 font-medium">(84) 68.6868.6868</p></div>
+        </div>
+      </div>
+      <div>
+        <h5 class="text-lg font-bold text-gray-800 mb-6">Help</h5>
+        <ul class="space-y-4 text-sm">
+          <li><a class="text-gray-800 hover:text-blue-700 font-medium" href="./settings-home.html">Contact Us</a></li>
+          <li><a class="text-gray-800 hover:text-blue-700 font-medium" href="./settings-bill.html">Privacy Policy</a></li>
+          <li><a class="text-gray-800 hover:text-blue-700 font-medium" href="./login.html">Terms of service</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  (() => {
+    const nk = "bkuParkingNavMode", pk = "bkuParkingProfile";
+    const def = document.querySelector("#default-nav-actions");
+    const auth = document.querySelector("#auth-nav-actions");
+    const av = document.querySelector("#auth-avatar");
+    const lb = document.querySelector("#auth-label");
+    function show(t) {
+      [def,auth].forEach(e=>{e?.classList.add("hidden");e?.classList.remove("flex");});
+      t?.classList.remove("hidden"); t?.classList.add("flex");
+    }
+    if (sessionStorage.getItem(nk)==="authenticated") {
+      const p = (()=>{try{return JSON.parse(localStorage.getItem(pk)||"{}");}catch{return{};}})();
+      if(p.avatar&&av) av.src=p.avatar;
+      if(p.firstName&&lb) lb.textContent=p.firstName;
+      show(auth);
+    } else { show(def); }
+  })();
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script defer src="./scripts/i18n.js?v=20260508-02"></script>
+  <script defer src="./scripts/site.js?v=20260508-02"></script>
+
+  <script>
+  (() => {
+    // ── Route definitions ─────────────────────────────────────────────────
+const ROUTES = {
+      // From Gate 1 to Gate 3 (Shifted 40px LEFT from original)
+      "gate-3": {
+        imgW: 1118, imgH: 203,
+        points: [
+          [484, 20],   
+          [405, 26], 
+          [381, 86],   
+          [344, 86],  
+          [274, 199], 
+          [706, 169], 
+          [891, 131], 
+          [897, 59], 
+          [872, 38]  
+        ]
+      },
+      // From Gate 1 to Gate 2 (Unchanged)
+      "gate-2": {
+        imgW: 1118, imgH: 203,
+        points: [
+          [435, 36],   
+          [360, 42], 
+          [348, 78],   
+          [311, 78],  
+          [239, 184], 
+          [679, 164], 
+          [685, 109]  
+        ]
+      },
+      // From Gate 3 to Gate 1 (Shifted 40px RIGHT from original)
+      "gate-1": {
+        imgW: 1280, imgH: 211,
+        points: [
+          [880, 48],   
+          [916, 48], 
+          [904, 121],  
+          [719, 164], 
+          [279, 184], 
+          [351, 78], 
+          [388, 78], 
+          [411, 30], 
+          [494, 30]  
+        ]
+      }
+    };
+    // ── Build cumulative arc-length table for a polyline ──────────────────
+    function arcTable(pts) {
+      const t = [0];
+      for (let i = 1; i < pts.length; i++) {
+        const dx = pts[i][0]-pts[i-1][0], dy = pts[i][1]-pts[i-1][1];
+        t.push(t[i-1] + Math.hypot(dx, dy));
+      }
+      return t;
+    }
+
+    // ── Evaluate position + heading angle at fraction t along polyline ─────
+    function evalLine(pts, arc, t) {
+      const total = arc[arc.length-1];
+      if (total === 0) return { x: pts[0][0], y: pts[0][1], a: 0 };
+      const d = Math.min(t * total, total - 0.001);
+      for (let i = 1; i < arc.length; i++) {
+        if (arc[i] >= d) {
+          const seg = (d - arc[i-1]) / (arc[i] - arc[i-1]);
+          const x = pts[i-1][0] + (pts[i][0]-pts[i-1][0]) * seg;
+          const y = pts[i-1][1] + (pts[i][1]-pts[i-1][1]) * seg;
+          const a = Math.atan2(pts[i][1]-pts[i-1][1], pts[i][0]-pts[i-1][0]);
+          return { x, y, a };
+        }
+      }
+      const n = pts.length-1;
+      return { x: pts[n][0], y: pts[n][1], a: Math.atan2(pts[n][1]-pts[n-1][1], pts[n][0]-pts[n-1][0]) };
+    }
+
+    // ── Draw a top-down car icon ───────────────────────────────────────────
+    function drawCar(ctx, cx, cy, a, s) {
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(a + Math.PI / 2);
+
+      ctx.shadowColor = "rgba(0,0,0,0.4)";
+      ctx.shadowBlur  = s * 0.4;
+      ctx.shadowOffsetX = s * 0.05;
+      ctx.shadowOffsetY = s * 0.08;
+
+      ctx.beginPath();
+      ctx.roundRect(-s*0.36, -s*0.68, s*0.72, s*1.36, s*0.2);
+      ctx.fillStyle = "#1d61f2";
+      ctx.fill();
+
+      ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
+
+      ctx.beginPath();
+      ctx.roundRect(-s*0.26, -s*0.38, s*0.52, s*0.72, s*0.14);
+      ctx.fillStyle = "#174acc";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.roundRect(-s*0.22, -s*0.56, s*0.44, s*0.26, s*0.06);
+      ctx.fillStyle = "rgba(180,225,255,0.9)";
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.roundRect(-s*0.20, s*0.24, s*0.40, s*0.20, s*0.05);
+      ctx.fillStyle = "rgba(180,225,255,0.75)";
+      ctx.fill();
+
+      const ww = s*0.17, wh = s*0.30, wr = s*0.05;
+      ctx.fillStyle = "#111827";
+      [[-s*0.50, -s*0.50], [s*0.33, -s*0.50],
+       [-s*0.50,  s*0.20], [s*0.33,  s*0.20]].forEach(([wx,wy])=>{
+        ctx.beginPath();
+        ctx.roundRect(wx, wy, ww, wh, wr);
+        ctx.fill();
+      });
+      ctx.fillStyle = "rgba(255,255,255,0.12)";
+      [[-s*0.50, -s*0.50], [s*0.33, -s*0.50],
+       [-s*0.50,  s*0.20], [s*0.33,  s*0.20]].forEach(([wx,wy])=>{
+        ctx.beginPath();
+        ctx.roundRect(wx+ww*0.2, wy+wh*0.15, ww*0.6, wh*0.35, wr);
+        ctx.fill();
+      });
+
+      ctx.fillStyle = "#ffe566";
+      ctx.beginPath(); ctx.ellipse(-s*0.21, -s*0.67, s*0.10, s*0.05, 0, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse( s*0.21, -s*0.67, s*0.10, s*0.05, 0, 0, Math.PI*2); ctx.fill();
+      ctx.fillStyle = "rgba(255,240,100,0.3)";
+      ctx.beginPath(); ctx.ellipse(-s*0.21, -s*0.67, s*0.16, s*0.09, 0, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse( s*0.21, -s*0.67, s*0.16, s*0.09, 0, 0, Math.PI*2); ctx.fill();
+
+      ctx.fillStyle = "#ff3b3b";
+      ctx.beginPath(); ctx.ellipse(-s*0.21, s*0.67, s*0.09, s*0.04, 0, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.ellipse( s*0.21, s*0.67, s*0.09, s*0.04, 0, 0, Math.PI*2); ctx.fill();
+
+      ctx.restore();
+    }
+
+    // ── Easing ────────────────────────────────────────────────────────────
+    function easeInOut(t) {
+      return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2;
+    }
+
+    // ── State ─────────────────────────────────────────────────────────────
+    let canvas = null, ctx2d = null;
+    let gateKey = null, scaledPts = null, arc = null;
+    let animId = null, startTs = null;
+    const DURATION = 4200; 
+
+    // ── Animation loop ────────────────────────────────────────────────────
+    function loop(ts) {
+      if (!ctx2d || !scaledPts) { animId = requestAnimationFrame(loop); return; }
+
+      if (startTs === null) startTs = ts;
+      const t = easeInOut(((ts - startTs) % DURATION) / DURATION);
+
+      const imgEl = document.querySelector(".parking-gate-map");
+      if (!imgEl) { animId = requestAnimationFrame(loop); return; }
+
+      const rect = imgEl.getBoundingClientRect();
+      const dpr  = window.devicePixelRatio || 1;
+      const cw   = Math.round(rect.width  * dpr);
+      const ch   = Math.round(rect.height * dpr);
+
+      if (canvas.width !== cw || canvas.height !== ch) {
+        canvas.width  = cw;
+        canvas.height = ch;
+        canvas.style.width  = rect.width  + "px";
+        canvas.style.height = rect.height + "px";
+        
+        // CSS ALIGNMENT FIX
+        canvas.style.left = imgEl.offsetLeft + "px";
+        canvas.style.top = imgEl.offsetTop + "px";
+
+        ctx2d.scale(dpr, dpr);
+        rebuildScaledPoints(rect.width, rect.height);
+      }
+
+      const { x, y, a } = evalLine(scaledPts, arc, t);
+      ctx2d.clearRect(0, 0, rect.width, rect.height);
+
+      const carSize = rect.height * 0.13;
+      drawCar(ctx2d, x, y, a, carSize);
+
+      animId = requestAnimationFrame(loop);
+    }
+
+    // ── Scale native pixel coords → rendered CSS pixels ───────────────────
+    function rebuildScaledPoints(rendW, rendH) {
+      const route = ROUTES[gateKey];
+      const sx = rendW / route.imgW;
+      const sy = rendH / route.imgH;
+      scaledPts = route.points.map(([px, py]) => [px * sx, py * sy]);
+      arc = arcTable(scaledPts);
+    }
+
+    // ── Attach canvas to the gate map block ───────────────────────────────
+    function attach(block, newGateKey) {
+      if (!block || !ROUTES[newGateKey]) return;
+      const imgEl = block.querySelector(".parking-gate-map");
+      if (!imgEl) return;
+
+      const doAttach = () => {
+        if (animId) { cancelAnimationFrame(animId); animId = null; }
+        const old = block.querySelector("#route-canvas");
+        if (old) old.remove();
+
+        canvas = document.createElement("canvas");
+        canvas.id = "route-canvas";
+        
+        const rect = imgEl.getBoundingClientRect();
+        const dpr  = window.devicePixelRatio || 1;
+        canvas.width  = Math.round(rect.width  * dpr);
+        canvas.height = Math.round(rect.height * dpr);
+        canvas.style.width  = rect.width  + "px";
+        canvas.style.height = rect.height + "px";
+        
+        // CSS ALIGNMENT FIX
+        canvas.style.left = imgEl.offsetLeft + "px";
+        canvas.style.top = imgEl.offsetTop + "px";
+
+        block.appendChild(canvas);
+
+        ctx2d = canvas.getContext("2d");
+        ctx2d.scale(dpr, dpr);
+
+        gateKey  = newGateKey;
+        startTs  = null;
+        rebuildScaledPoints(rect.width, rect.height);
+        animId = requestAnimationFrame(loop);
+      };
+
+      if (imgEl.complete && imgEl.naturalWidth > 0) {
+        doAttach();
+      } else {
+        imgEl.addEventListener("load", doAttach, { once: true });
+      }
+    }
+
+    // ── Detect current gate from image src ────────────────────────────────
+    function checkAndAttach() {
+      const block = document.querySelector(".parking-gate-map-block");
+      if (!block) return;
+      const imgEl = block.querySelector(".parking-gate-map");
+      if (!imgEl) return;
+
+      const src = imgEl.getAttribute("src") || "";
+      const m = src.match(/gate[\s%20_-]*(\d)/i)
+             || src.match(/(\d)\.png$/i);
+      if (!m) return;
+
+      const newKey = `gate-${m[1]}`;
+      if (newKey === gateKey && block.querySelector("#route-canvas")) return;
+
+      attach(block, newKey);
+    }
+
+    const lower = document.getElementById("parking-lower");
+    if (lower) {
+      new MutationObserver(checkAndAttach).observe(lower, { childList: true, subtree: true });
+    }
+    checkAndAttach();
+
+    window.addEventListener("resize", () => {
+      const imgEl = document.querySelector(".parking-gate-map");
+      if (imgEl && scaledPts) {
+        const rect = imgEl.getBoundingClientRect();
+        rebuildScaledPoints(rect.width, rect.height);
+      }
+    });
+  })();
+  </script>
+</body>
+</html>

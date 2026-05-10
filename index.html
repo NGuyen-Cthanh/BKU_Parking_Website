@@ -4,19 +4,111 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
   <title>BKU Parking - Park Smarter</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link rel="stylesheet" href="styles/main.css">
-  <style data-purpose="layout-styles">
+  <style>
     .hero-text-style {
       color: #ffffff;
       text-shadow: 0 2px 16px rgba(0,0,0,0.5);
     }
+
+    /* Feature cards */
+    .feature-card {
+      background: #fff;
+      border: 1.5px solid #e5e9f2;
+      border-radius: 20px;
+      padding: 36px 32px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      cursor: pointer;
+      transition: box-shadow 200ms ease, transform 200ms ease, border-color 200ms ease;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .feature-card:hover {
+      box-shadow: 0 12px 40px rgba(36, 99, 235, 0.13);
+      border-color: #2463eb;
+      transform: translateY(-3px);
+    }
+
+    .feature-card-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.7rem;
+      flex-shrink: 0;
+    }
+
+    .feature-card-icon.blue { background: #edf4ff; }
+    .feature-card-icon.green { background: #ecfaef; }
+
+    .feature-card-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #111827;
+    }
+
+    .feature-card-desc {
+      font-size: 0.9rem;
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    .feature-card-arrow {
+      margin-top: auto;
+      padding-top: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #2463eb;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Info strip */
+    .info-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 40px;
+    }
+
+    .info-item {
+      background: #f6f8fb;
+      border-radius: 14px;
+      padding: 20px 22px;
+      text-align: center;
+    }
+
+    .info-item-value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: #111827;
+    }
+
+    .info-item-label {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 640px) {
+      .feature-grid { grid-template-columns: 1fr !important; }
+      .info-strip { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body class="font-sans text-gray-900 bg-white" data-page="landing">
+
+  <!-- Header -->
   <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm h-16">
     <div class="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
       <div class="flex items-center gap-2">
@@ -26,19 +118,14 @@
 
       <nav class="hidden md:flex items-center space-x-8 font-medium">
         <a class="hover:text-blue-700 transition-colors" href="./index.html">Home</a>
-        <a class="hover:text-blue-700 transition-colors" href="#landscape-map">Map</a>
+        <a class="hover:text-blue-700 transition-colors" href="./map.html">Map</a>
         <a class="hover:text-blue-700 transition-colors" href="./BKPay_Bill.html">BKPay</a>
       </nav>
 
       <div class="flex items-center gap-3">
-        <button class="text-gray-600 hover:text-blue-700" type="button" aria-label="Search">
-          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-          </svg>
-        </button>
-
         <div class="h-5 w-px bg-gray-300"></div>
 
+        <!-- Logged in state -->
         <div class="hidden items-center gap-3" id="auth-nav-actions">
           <a aria-label="Open account settings" class="h-8 w-8 overflow-hidden rounded-full hover:opacity-90 transition-opacity border border-gray-200" href="./settings-home.html">
             <img alt="Account avatar" class="h-full w-full object-cover" id="auth-avatar" src="./assets/images/thanh-avatar.svg">
@@ -46,13 +133,13 @@
           <span class="text-sm font-medium text-gray-800" id="auth-label">Thanh</span>
         </div>
 
+        <!-- Logged out state -->
         <div class="flex items-center gap-2" id="default-nav-actions">
           <a class="flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-blue-700 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors" href="./login.html">
             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
             <span>Login</span>
           </a>
           <a class="flex items-center gap-1.5 text-sm font-semibold text-blue-600 hover:text-blue-700 px-3 py-1.5 rounded-lg border border-blue-200 hover:border-blue-400 hover:bg-blue-50 transition-colors" href="./login.html">
-            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
             <span>Sign Up</span>
           </a>
         </div>
@@ -60,56 +147,97 @@
     </div>
   </header>
 
-  <section class="relative h-[480px] mt-16 overflow-hidden">
+  <!-- Hero -->
+  <section class="relative h-[420px] mt-16 overflow-hidden">
     <img alt="Campus Illustration" class="absolute inset-0 w-full h-full object-cover object-center" src="./assets/images/BKU drawing_1.png">
-    <div class="absolute inset-0" style="background: linear-gradient(to right, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 45%, transparent 100%);"></div>
-    <div class="absolute inset-0 flex flex-col justify-start pt-16 px-14 md:px-20">
+    <div class="absolute inset-0" style="background: linear-gradient(to right, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);"></div>
+    <div class="absolute inset-0 flex flex-col justify-center px-14 md:px-20">
       <div class="max-w-lg">
-        <h1 class="text-[52px] font-black mb-4 leading-tight hero-text-style">BKU Parking</h1>
-        <p class="text-[16px] font-semibold leading-relaxed mb-1 hero-text-style">Park smarter, not harder.</p>
-        <p class="text-[16px] font-semibold hero-text-style">Easily find a spot and save time every time you come to campus.</p>
+        <h1 class="text-[48px] font-black mb-3 leading-tight hero-text-style">BKU Parking</h1>
+        <p class="text-[16px] font-semibold leading-relaxed hero-text-style">Park smarter, not harder.</p>
+        <p class="text-[15px] font-medium hero-text-style opacity-90 mt-1">Find a spot and pay your bill — all in one place.</p>
       </div>
-    </div>
-    <div class="absolute bottom-6 left-14 md:left-20" data-purpose="language-selector" data-language-layout="landing">
-      <span>English (United States)</span>
-      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
     </div>
   </section>
 
-  <main class="map-section" id="landscape-map">
-    <div class="section-intro">
-      <h2>Landscape Map</h2>
-      <p>Please observe the real-time parking map to find a parking spot faster and see each zone numbered from top to bottom.</p>
+  <!-- Main content -->
+  <main class="max-w-4xl mx-auto px-6 py-14">
+
+    <!-- Welcome message (shown when logged in) -->
+    <div id="welcome-banner" class="hidden mb-8 p-4 bg-blue-50 border border-blue-200 rounded-xl text-blue-800 font-medium text-sm">
+      👋 Welcome back, <span id="welcome-name">there</span>! What would you like to do today?
     </div>
 
-    <div class="map-shell">
-      <div class="parking-overview">
-        <div aria-live="polite" class="parking-lower" id="parking-lower"></div>
-        <p class="parking-status-note" id="parking-status-message">Loading live Excel data...</p>
-      </div>
+    <!-- Admin banner (shown only for admin role) -->
+    <div id="admin-banner" class="hidden mb-8 p-4 bg-amber-50 border border-amber-300 rounded-xl text-amber-800 font-medium text-sm flex items-center justify-between">
+      <span>🔐 You are logged in as <strong>Administrator</strong>. You have access to the Admin Dashboard.</span>
+      <a href="./admin.html" class="ml-4 px-4 py-2 bg-amber-400 hover:bg-amber-500 text-white font-semibold rounded-lg text-sm transition-colors whitespace-nowrap">Go to Admin →</a>
+    </div>
 
-      <div class="legend">
-        <div class="legend-item">
-          <span class="legend-swatch legend-zone">A</span>
-          <span>Zones</span>
+    <h2 class="text-2xl font-bold text-gray-900 mb-2">Quick Access</h2>
+    <p class="text-gray-500 text-sm mb-8">Select a service below to get started.</p>
+
+    <!-- Feature cards -->
+    <div class="feature-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap: 18px;">
+
+      <a href="./map.html" class="feature-card">
+        <div class="feature-card-icon blue">🗺️</div>
+        <div>
+          <div class="feature-card-title">Parking Map</div>
+          <div class="feature-card-desc">View real-time parking availability across Gate 1, 2, and 3. Find and select your spot before you arrive.</div>
         </div>
-        <div class="legend-item">
-          <span class="legend-swatch legend-available">00</span>
-          <span>Available</span>
+        <div class="feature-card-arrow">Go to Map →</div>
+      </a>
+
+      <a href="./BKPay_Bill.html" class="feature-card">
+        <div class="feature-card-icon green">💳</div>
+        <div>
+          <div class="feature-card-title">BKPay — Pay Bill</div>
+          <div class="feature-card-desc">View your current semester parking fee and pay securely through the BKPay platform.</div>
         </div>
-        <div class="legend-item">
-          <span class="legend-swatch legend-selected">00</span>
-          <span>Selected</span>
+        <div class="feature-card-arrow">Go to BKPay →</div>
+      </a>
+
+      <a href="./report.html" class="feature-card">
+        <div class="feature-card-icon" style="background:#fef3f2;">🎫</div>
+        <div>
+          <div class="feature-card-title">Report an Issue</div>
+          <div class="feature-card-desc">Submit a support ticket for payment errors, gate issues, sensor faults or any other problems.</div>
         </div>
-        <div class="legend-item">
-          <span class="legend-swatch legend-unavailable">00</span>
-          <span>Unavailable</span>
+        <div class="feature-card-arrow" style="color:#dc2626;">Report Now →</div>
+      </a>
+
+      <a href="./admin.html" class="feature-card" id="admin-card" style="display:none; border-color:#ffc107;">
+        <div class="feature-card-icon" style="background:#fff8e1;">🛡️</div>
+        <div>
+          <div class="feature-card-title">Admin Dashboard</div>
+          <div class="feature-card-desc">Manage parking slots, view activity logs, configure pricing and monitor IoT sensors in real time.</div>
         </div>
+        <div class="feature-card-arrow" style="color:#b45309;">Go to Admin →</div>
+      </a>
+
+    </div>
+
+    <!-- Info strip -->
+    <div class="info-strip">
+      <div class="info-item">
+        <div class="info-item-value" id="strip-available">--</div>
+        <div class="info-item-label">Slots available now</div>
+      </div>
+      <div class="info-item">
+        <div class="info-item-value">3</div>
+        <div class="info-item-label">Gates open</div>
+      </div>
+      <div class="info-item">
+        <div class="info-item-value">24/7</div>
+        <div class="info-item-label">System uptime</div>
       </div>
     </div>
+
   </main>
 
-  <footer class="bg-[#f0f4f8] py-16 px-6">
+  <!-- Footer -->
+  <footer class="bg-[#f0f4f8] py-16 px-6 mt-8">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
       <div class="md:col-span-2">
         <div class="flex items-center gap-3 mb-6">
@@ -120,11 +248,9 @@
           Park smarter, save time on campus, and keep your parking status visible from one place.
         </p>
         <p class="text-xs text-gray-500">
-          Copyright 2026 TA NBINHTAINANGTEAM<br>
-          All rights reserved.
+          Copyright © 2026 TANBINHTAINANGTEAM<br>All rights reserved.
         </p>
       </div>
-
       <div>
         <h5 class="text-lg font-bold text-gray-800 mb-6">Technician</h5>
         <div class="space-y-4 text-sm">
@@ -138,7 +264,6 @@
           </div>
         </div>
       </div>
-
       <div>
         <h5 class="text-lg font-bold text-gray-800 mb-6">Help</h5>
         <ul class="space-y-4 text-sm">
@@ -152,45 +277,54 @@
 
   <script>
     (() => {
-      const landingNavModeKey = "bkuParkingNavMode";
-      const landingProfileKey = "bkuParkingProfile";
+      const navModeKey = "bkuParkingNavMode";
+      const profileKey = "bkuParkingProfile";
       const defaultNavActions = document.querySelector("#default-nav-actions");
       const authNavActions = document.querySelector("#auth-nav-actions");
       const authAvatar = document.querySelector("#auth-avatar");
       const authLabel = document.querySelector("#auth-label");
-      const authState = sessionStorage.getItem(landingNavModeKey);
+      const welcomeBanner = document.querySelector("#welcome-banner");
+      const welcomeName = document.querySelector("#welcome-name");
+      const authState = sessionStorage.getItem(navModeKey);
 
       function showActions(target) {
-        defaultNavActions?.classList.add("hidden");
-        authNavActions?.classList.add("hidden");
-        defaultNavActions?.classList.remove("flex");
-        authNavActions?.classList.remove("flex");
+        [defaultNavActions, authNavActions].forEach(el => {
+          el?.classList.add("hidden");
+          el?.classList.remove("flex");
+        });
         target?.classList.remove("hidden");
         target?.classList.add("flex");
       }
 
       if (authState === "authenticated") {
-        const savedProfile = (() => {
-          try {
-            return JSON.parse(localStorage.getItem(landingProfileKey) || "{}");
-          } catch {
-            return {};
-          }
+        const profile = (() => {
+          try { return JSON.parse(localStorage.getItem(profileKey) || "{}"); }
+          catch { return {}; }
         })();
-        if (savedProfile.avatar && authAvatar) {
-          authAvatar.src = savedProfile.avatar;
-        }
-        if (savedProfile.firstName && authLabel) {
-          authLabel.textContent = savedProfile.firstName;
+        if (profile.avatar && authAvatar) authAvatar.src = profile.avatar;
+        if (profile.firstName && authLabel) authLabel.textContent = profile.firstName;
+        if (profile.firstName && welcomeName) welcomeName.textContent = profile.firstName;
+
+        const role = sessionStorage.getItem('bkuParkingRole');
+        if (role === 'admin') {
+          const adminBanner = document.querySelector("#admin-banner");
+          const adminCard = document.querySelector("#admin-card");
+          if (adminBanner) adminBanner.classList.remove("hidden");
+          if (adminCard) adminCard.style.display = "";
+        } else {
+          if (welcomeBanner) welcomeBanner.classList.remove("hidden");
         }
         showActions(authNavActions);
       } else {
         showActions(defaultNavActions);
       }
+
+      // Mock available slots counter
+      const slots = 210 - Math.floor(Math.random() * 80);
+      const stripEl = document.getElementById('strip-available');
+      if (stripEl) stripEl.textContent = slots;
     })();
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script defer src="./scripts/i18n.js?v=20260508-02"></script>
-  <script defer src="./scripts/site.js?v=20260508-02"></script>
+
 </body>
 </html>

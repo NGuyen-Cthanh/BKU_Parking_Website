@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BKU Parking | Admin Dashboard</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <style>
+    /* ── Admin-specific styles ── */
+    .admin-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #fff3cd;
+      color: #856404;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 999px;
+      border: 1px solid #ffc107;
+      margin-left: 8px;
+      letter-spacing: 0.04em;
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 18px 20px;
+    }
+
+    .stat-card-label {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .stat-card-value {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .stat-card-sub {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .stat-card.green .stat-card-value { color: var(--success); }
+    .stat-card.red .stat-card-value { color: #e03e3e; }
+    .stat-card.blue .stat-card-value { color: var(--primary); }
+
+    .admin-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 18px 20px;
+    }
+
+    .panel-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0 0 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .panel-title-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Pricing config */
+    .price-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .price-table th, .price-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.88rem;
+    }
+
+    .price-table th {
+      color: var(--muted-strong);
+      font-weight: 700;
+      font-size: 0.8rem;
+      background: #f6f8fb;
+    }
+
+    .price-table tr:last-child td { border-bottom: 0; }
+
+    .price-input {
+      width: 110px;
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font-size: 0.88rem;
+      color: var(--text);
+      background: #fafbfc;
+    }
+
+    .price-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #fff;
+    }
+
+    .save-btn {
+      background: var(--primary);
+      color: #fff;
+      border: 0;
+      border-radius: 8px;
+      padding: 7px 18px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 140ms;
+    }
+
+    .save-btn:hover { background: var(--primary-dark); }
+
+    .save-btn.saved {
+      background: var(--success);
+    }
+
+    /* Log table */
+    .log-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .log-table th, .log-table td {
+      padding: 9px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      font-size: 0.84rem;
+    }
+
+    .log-table th {
+      color: var(--muted-strong);
+      font-weight: 700;
+      font-size: 0.78rem;
+      background: #f6f8fb;
+      position: sticky;
+      top: 0;
+    }
+
+    .log-table tr:last-child td { border-bottom: 0; }
+    .log-table tbody tr:hover { background: #fafcff; }
+
+    .log-scroll {
+      max-height: 280px;
+      overflow-y: auto;
+      border-radius: 0 0 8px 8px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .badge-in { background: #ecfaef; color: #1a7a40; }
+    .badge-out { background: #fff0f0; color: #c0392b; }
+    .badge-visitor { background: #f0f4ff; color: #2463eb; }
+    .badge-student { background: #fef9ec; color: #856404; }
+    .badge-staff { background: #f5f0ff; color: #6b3fa0; }
+
+    /* Signage panel */
+    .signage-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .signage-card {
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .signage-card-title {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .signage-status {
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .signage-count {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .status-available { color: var(--success); }
+    .status-nearly { color: #d97706; }
+    .status-full { color: #e03e3e; }
+
+    .signage-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 4px;
+    }
+
+    .dot-green { background: var(--success); }
+    .dot-yellow { background: #d97706; }
+    .dot-red { background: #e03e3e; }
+
+    /* Sensor panel */
+    .sensor-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sensor-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: #fafbfc;
+      border: 1px solid var(--line);
+      font-size: 0.84rem;
+    }
+
+    .sensor-row-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sensor-status-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+    }
+
+    .online { background: var(--success); }
+    .offline { background: #e03e3e; }
+    .warning { background: #d97706; }
+
+    .sensor-id { font-weight: 600; color: var(--text); }
+    .sensor-zone { color: var(--muted); font-size: 0.78rem; }
+    .sensor-time { color: var(--muted); font-size: 0.78rem; }
+
+    /* Pulse animation for online sensors */
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .sensor-status-dot.online { animation: pulse-dot 2s ease-in-out infinite; }
+
+    /* Logout / header */
+    .sidebar-role {
+      font-size: 0.72rem;
+      color: #856404;
+      font-weight: 700;
+      background: #fff3cd;
+      border: 1px solid #ffc107;
+      border-radius: 999px;
+      padding: 2px 8px;
+      margin-top: 4px;
+      display: inline-block;
+    }
+
+    @media (max-width: 1100px) {
+      .admin-grid { grid-template-columns: repeat(2, 1fr); }
+      .admin-two-col { grid-template-columns: 1fr; }
+      .signage-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 700px) {
+      .admin-grid { grid-template-columns: 1fr 1fr; }
+      .signage-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── Ticket styles ── */
+    .priority-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:4px; }
+    .priority-dot.low { background:#16a34a; }
+    .priority-dot.medium { background:#d97706; }
+    .priority-dot.high { background:#dc2626; }
+
+    .t-badge { display:inline-flex; align-items:center; padding:2px 8px; border-radius:999px; font-size:0.72rem; font-weight:700; }
+    .t-badge.open { background:#eff6ff; color:#2563eb; }
+    .t-badge.in-progress { background:#fffbeb; color:#d97706; }
+    .t-badge.resolved { background:#f0fdf4; color:#16a34a; }
+    .t-badge.closed { background:#f8fafc; color:#94a3b8; }
+
+    .action-btn {
+      font-size:0.78rem; padding:4px 10px; border-radius:6px; border:1px solid var(--line);
+      cursor:pointer; background:#fafbfc; color:var(--muted-strong); transition:all 120ms; font-weight:600;
+    }
+    .action-btn:hover { background:var(--primary); color:#fff; border-color:var(--primary); }
+
+    .modal-label { font-size:0.78rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px; }
+    .modal-value { font-size:0.9rem; color:var(--text); margin-bottom:14px; }
+    .modal-desc { background:#f8fafc; border-radius:8px; padding:12px 14px; font-size:0.88rem; color:var(--text); line-height:1.6; margin-bottom:14px; }
+    .reply-textarea { width:100%; box-sizing:border-box; border:1.5px solid var(--line); border-radius:8px; padding:10px 12px; font-size:0.88rem; resize:vertical; min-height:80px; outline:none; }
+    .reply-textarea:focus { border-color:var(--primary); }
+    .modal-actions { display:flex; gap:8px; margin-top:14px; flex-wrap:wrap; }
+    .modal-btn { padding:8px 16px; border-radius:8px; font-size:0.85rem; font-weight:600; cursor:pointer; border:none; transition:background 140ms; }
+    .modal-btn.primary { background:var(--primary); color:#fff; }
+    .modal-btn.primary:hover { background:var(--primary-dark); }
+    .modal-btn.success { background:#16a34a; color:#fff; }
+    .modal-btn.warn { background:#d97706; color:#fff; }
+    .modal-btn.ghost { background:#f1f4f9; color:var(--muted-strong); border:1px solid var(--line); }
+  </style>
+</head>
+<body class="settings-body" data-page="admin">
+  <div class="dashboard-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <a class="brand sidebar-brand" href="index.html" aria-label="BKU Parking home">
+        <img class="brand-mark" src="./assets/images/logo.png" alt="BKU logo">
+        <span class="brand-text">BKU Parking</span>
+      </a>
+
+      <div class="sidebar-avatar">
+        <span>A</span>
+      </div>
+      <div style="text-align:center; margin-top:-10px; margin-bottom:10px;">
+        <span class="sidebar-role">⚙ ADMIN</span>
+      </div>
+
+      <nav class="sidebar-nav" aria-label="Admin navigation">
+        <a href="admin.html" class="nav-item is-active">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5V20H4Z"></path></svg>
+          </span>
+          <span>Dashboard</span>
+        </a>
+        <a href="#pricing" class="nav-item" onclick="scrollToSection('pricing')">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M18.36 5.64l1.41-1.41"></path></svg>
+          </span>
+          <span>Pricing</span>
+        </a>
+        <a href="#logs" class="nav-item" onclick="scrollToSection('logs')">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2"></path></svg>
+          </span>
+          <span>Activity Log</span>
+        </a>
+        <a href="#sensors" class="nav-item" onclick="scrollToSection('sensors')">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M6.3 6.3a8 8 0 0 0 0 11.4M17.7 6.3a8 8 0 0 1 0 11.4M3.5 3.5a12 12 0 0 0 0 17M20.5 3.5a12 12 0 0 1 0 17"></path></svg>
+          </span>
+          <span>Sensors</span>
+        </a>
+        <a href="#tickets" class="nav-item" onclick="scrollToSection('tickets')" id="nav-tickets">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5v2M15 11v2M15 17v2M5 5h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4V7a2 2 0 0 1 2-2z"></path></svg>
+          </span>
+          <span>Tickets</span>
+          <span class="nav-badge" id="ticket-nav-badge" style="display:none;">0</span>
+        </a>
+        <a href="index.html" class="nav-item">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"></path></svg>
+          </span>
+          <span>Back to Site</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- Main content -->
+    <main class="dashboard-content">
+      <section class="dashboard-header">
+        <h1>Admin Dashboard <span class="admin-badge">⚙ ADMIN</span></h1>
+        <p style="color:var(--muted); font-size:0.9rem; margin:4px 0 0;">BKU Smart Parking Management System — full control panel</p>
+      </section>
+
+      <!-- Stats -->
+      <div class="admin-grid">
+        <div class="stat-card green">
+          <div class="stat-card-label">🟢 Available Slots</div>
+          <div class="stat-card-value" id="stat-available">--</div>
+          <div class="stat-card-sub">across all 3 gates</div>
+        </div>
+        <div class="stat-card red">
+          <div class="stat-card-label">🔴 Occupied Slots</div>
+          <div class="stat-card-value" id="stat-occupied">--</div>
+          <div class="stat-card-sub" id="stat-pct">-- % capacity used</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">⚠️ Sensor Faults</div>
+          <div class="stat-card-value" id="stat-faults">2</div>
+          <div class="stat-card-sub">require attention</div>
+        </div>
+        <div class="stat-card blue">
+          <div class="stat-card-label">💰 Revenue Today</div>
+          <div class="stat-card-value" id="stat-revenue">--</div>
+          <div class="stat-card-sub">VND collected</div>
+        </div>
+      </div>
+
+      <!-- Signage status -->
+      <div class="panel" style="margin-bottom:14px;" id="signage-panel">
+        <div class="panel-title">
+          📺 Electronic Signage — Real-time Gate Status
+        </div>
+        <div class="signage-grid">
+          <div class="signage-card">
+            <div class="signage-card-title">Gate 1</div>
+            <div class="signage-status status-available" id="sign-gate1">Available</div>
+            <div class="signage-count" id="sign-count1"><span class="signage-dot dot-green"></span>-- slots free</div>
+          </div>
+          <div class="signage-card">
+            <div class="signage-card-title">Gate 2</div>
+            <div class="signage-status status-nearly" id="sign-gate2">Nearly Full</div>
+            <div class="signage-count" id="sign-count2"><span class="signage-dot dot-yellow"></span>-- slots free</div>
+          </div>
+          <div class="signage-card">
+            <div class="signage-card-title">Gate 3</div>
+            <div class="signage-status status-available" id="sign-gate3">Available</div>
+            <div class="signage-count" id="sign-count3"><span class="signage-dot dot-green"></span>-- slots free</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing config + Sensor status -->
+      <div class="admin-two-col">
+
+        <!-- Pricing -->
+        <div class="panel" id="pricing">
+          <div class="panel-title">
+            💲 Pricing Configuration
+            <div class="panel-title-actions">
+              <button class="save-btn" id="save-price-btn" onclick="savePricing()">Save Changes</button>
+            </div>
+          </div>
+          <table class="price-table">
+            <thead>
+              <tr>
+                <th>User Type</th>
+                <th>Rate (VND/session)</th>
+                <th>Billing</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>🎓 Student</td>
+                <td><input class="price-input" id="price-student" type="number" value="5000"></td>
+                <td>Per semester</td>
+              </tr>
+              <tr>
+                <td>👩‍🏫 Faculty</td>
+                <td><input class="price-input" id="price-faculty" type="number" value="0"></td>
+                <td>Free (configurable)</td>
+              </tr>
+              <tr>
+                <td>👔 Staff</td>
+                <td><input class="price-input" id="price-staff" type="number" value="2000"></td>
+                <td>Per month</td>
+              </tr>
+              <tr>
+                <td>🪪 Visitor</td>
+                <td><input class="price-input" id="price-visitor" type="number" value="10000"></td>
+                <td>Per session</td>
+              </tr>
+              <tr>
+                <td>🔑 Temp Access</td>
+                <td><input class="price-input" id="price-temp" type="number" value="15000"></td>
+                <td>Per session</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-size:0.78rem; color:var(--muted); margin-top:10px;">
+            Changes are saved to localStorage and applied on next billing cycle.
+          </p>
+        </div>
+
+        <!-- Sensor Status -->
+        <div class="panel" id="sensors">
+          <div class="panel-title">📡 IoT Sensor Status</div>
+          <div class="sensor-list" id="sensor-list">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Activity Log -->
+      <div class="panel" id="logs">
+        <div class="panel-title">
+          📋 Activity Log
+          <div class="panel-title-actions">
+            <button class="save-btn" style="background:#f1f4f9; color:var(--muted-strong); border:1px solid var(--line);" onclick="exportLog()">Export CSV</button>
+          </div>
+        </div>
+        <div class="log-scroll">
+          <table class="log-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Time</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Gate</th>
+                <th>Action</th>
+                <th>Vehicle</th>
+              </tr>
+            </thead>
+            <tbody id="log-table-body">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tickets Panel -->
+      <div class="panel" id="tickets" style="margin-top:14px;">
+        <div class="panel-title">
+          🎫 Support Tickets
+          <div class="panel-title-actions">
+            <select id="ticket-filter" onchange="renderAdminTickets()" style="font-size:0.82rem; border:1px solid var(--line); border-radius:6px; padding:4px 10px; color:var(--muted-strong); background:#fafbfc; outline:none;">
+              <option value="">All Status</option>
+              <option value="open">Open</option>
+              <option value="in-progress">In Progress</option>
+              <option value="resolved">Resolved</option>
+              <option value="closed">Closed</option>
+            </select>
+            <button class="save-btn" style="background:#f1f4f9; color:var(--muted-strong); border:1px solid var(--line);" onclick="exportTickets()">Export CSV</button>
+          </div>
+        </div>
+
+        <!-- Ticket stats row -->
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:16px;" id="ticket-stats-row">
+          <div style="background:#eff6ff; border-radius:8px; padding:12px 14px; text-align:center;">
+            <div style="font-size:1.5rem; font-weight:800; color:#2563eb;" id="tstat-open">0</div>
+            <div style="font-size:0.75rem; color:#64748b; margin-top:2px;">Open</div>
+          </div>
+          <div style="background:#fffbeb; border-radius:8px; padding:12px 14px; text-align:center;">
+            <div style="font-size:1.5rem; font-weight:800; color:#d97706;" id="tstat-inprog">0</div>
+            <div style="font-size:0.75rem; color:#64748b; margin-top:2px;">In Progress</div>
+          </div>
+          <div style="background:#f0fdf4; border-radius:8px; padding:12px 14px; text-align:center;">
+            <div style="font-size:1.5rem; font-weight:800; color:#16a34a;" id="tstat-resolved">0</div>
+            <div style="font-size:0.75rem; color:#64748b; margin-top:2px;">Resolved</div>
+          </div>
+          <div style="background:#f8fafc; border-radius:8px; padding:12px 14px; text-align:center;">
+            <div style="font-size:1.5rem; font-weight:800; color:#94a3b8;" id="tstat-total">0</div>
+            <div style="font-size:0.75rem; color:#64748b; margin-top:2px;">Total</div>
+          </div>
+        </div>
+
+        <!-- Ticket table -->
+        <div class="log-scroll">
+          <table class="log-table" id="ticket-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Category</th>
+                <th>Subject</th>
+                <th>Reporter</th>
+                <th>Gate</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="ticket-table-body"></tbody>
+          </table>
+        </div>
+        <div id="ticket-empty" style="display:none; text-align:center; padding:36px; color:var(--muted); font-size:0.88rem;">
+          🗂️ No tickets found.
+        </div>
+      </div>
+
+      <!-- Ticket Detail Modal -->
+      <div id="ticket-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:200; align-items:center; justify-content:center;">
+        <div style="background:#fff; border-radius:16px; padding:28px 32px; width:520px; max-width:95vw; max-height:85vh; overflow-y:auto; position:relative; box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+          <button onclick="closeModal()" style="position:absolute; top:16px; right:18px; background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--muted);">×</button>
+          <div id="modal-content"></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // ── Guard: redirect if not admin ──────────────────────────────────────────
+    const role = sessionStorage.getItem('bkuParkingRole');
+    if (role !== 'admin') {
+      window.location.href = './login.html';
+    }
+
+    // ── Mock data ─────────────────────────────────────────────────────────────
+    const TOTAL_SLOTS = { gate1: 80, gate2: 60, gate3: 70 };
+
+    const mockSlots = {
+      gate1: { occupied: 32 },
+      gate2: { occupied: 54 },
+      gate3: { occupied: 41 }
+    };
+
+    const mockSensors = [
+      { id: 'SNS-G1-01', zone: 'Gate 1 — Zone A', status: 'online', last: '2s ago' },
+      { id: 'SNS-G1-02', zone: 'Gate 1 — Zone B', status: 'online', last: '3s ago' },
+      { id: 'SNS-G2-01', zone: 'Gate 2 — Zone A', status: 'warning', last: '45s ago' },
+      { id: 'SNS-G2-02', zone: 'Gate 2 — Zone B', status: 'offline', last: '5m ago' },
+      { id: 'SNS-G3-01', zone: 'Gate 3 — Zone A', status: 'online', last: '1s ago' },
+      { id: 'SNS-G3-02', zone: 'Gate 3 — Zone B', status: 'offline', last: '12m ago' },
+    ];
+
+    const mockLogs = [
+      { time: '08:02', name: 'Nguyen Van A', type: 'student', gate: 'Gate 1', action: 'in', vehicle: '51A-123.45' },
+      { time: '08:05', name: 'Tran Thi B', type: 'faculty', gate: 'Gate 2', action: 'in', vehicle: '59B-678.90' },
+      { time: '08:11', name: 'Visitor #019', type: 'visitor', gate: 'Gate 3', action: 'in', vehicle: 'Temp ticket' },
+      { time: '08:18', name: 'Le Quoc C', type: 'student', gate: 'Gate 1', action: 'out', vehicle: '51A-234.56' },
+      { time: '08:22', name: 'Pham Minh D', type: 'staff', gate: 'Gate 2', action: 'in', vehicle: '50G-321.09' },
+      { time: '08:30', name: 'Nguyen Thi E', type: 'student', gate: 'Gate 3', action: 'in', vehicle: '51C-456.78' },
+      { time: '08:35', name: 'Visitor #020', type: 'visitor', gate: 'Gate 1', action: 'out', vehicle: 'Temp ticket' },
+      { time: '08:41', name: 'Hoang Van F', type: 'faculty', gate: 'Gate 2', action: 'out', vehicle: '59B-111.22' },
+      { time: '08:47', name: 'Do Thi G', type: 'student', gate: 'Gate 1', action: 'in', vehicle: '51A-789.01' },
+      { time: '08:53', name: 'Vu Minh H', type: 'staff', gate: 'Gate 3', action: 'in', vehicle: '50F-654.32' },
+    ];
+
+    // ── Render stats ──────────────────────────────────────────────────────────
+    function renderStats() {
+      const totalOccupied = mockSlots.gate1.occupied + mockSlots.gate2.occupied + mockSlots.gate3.occupied;
+      const totalSlots = TOTAL_SLOTS.gate1 + TOTAL_SLOTS.gate2 + TOTAL_SLOTS.gate3;
+      const totalFree = totalSlots - totalOccupied;
+      const pct = Math.round((totalOccupied / totalSlots) * 100);
+      const revenue = mockLogs.filter(l => l.action === 'in' && l.type !== 'faculty').length * 5000;
+
+      document.getElementById('stat-available').textContent = totalFree;
+      document.getElementById('stat-occupied').textContent = totalOccupied;
+      document.getElementById('stat-pct').textContent = `${pct}% capacity used`;
+      document.getElementById('stat-revenue').textContent = new Intl.NumberFormat('vi-VN').format(revenue);
+    }
+
+    // ── Render signage ────────────────────────────────────────────────────────
+    function getSignageStatus(occupied, total) {
+      const pct = occupied / total;
+      if (pct >= 1) return { label: 'Full', cls: 'status-full', dotCls: 'dot-red' };
+      if (pct >= 0.8) return { label: 'Nearly Full', cls: 'status-nearly', dotCls: 'dot-yellow' };
+      return { label: 'Available', cls: 'status-available', dotCls: 'dot-green' };
+    }
+
+    function renderSignage() {
+      ['gate1', 'gate2', 'gate3'].forEach((g, i) => {
+        const n = i + 1;
+        const free = TOTAL_SLOTS[g] - mockSlots[g].occupied;
+        const { label, cls, dotCls } = getSignageStatus(mockSlots[g].occupied, TOTAL_SLOTS[g]);
+        const signEl = document.getElementById(`sign-gate${n}`);
+        signEl.textContent = label;
+        signEl.className = `signage-status ${cls}`;
+        document.getElementById(`sign-count${n}`).innerHTML =
+          `<span class="signage-dot ${dotCls}"></span>${free} slots free`;
+      });
+    }
+
+    // ── Render sensors ────────────────────────────────────────────────────────
+    function renderSensors() {
+      const list = document.getElementById('sensor-list');
+      list.innerHTML = mockSensors.map(s => `
+        <div class="sensor-row">
+          <div class="sensor-row-left">
+            <div class="sensor-status-dot ${s.status}"></div>
+            <div>
+              <div class="sensor-id">${s.id}</div>
+              <div class="sensor-zone">${s.zone}</div>
+            </div>
+          </div>
+          <div class="sensor-time">Last seen: ${s.last}</div>
+        </div>
+      `).join('');
+    }
+
+    // ── Render log ────────────────────────────────────────────────────────────
+    function renderLog() {
+      const tbody = document.getElementById('log-table-body');
+      tbody.innerHTML = mockLogs.map((row, i) => `
+        <tr>
+          <td style="color:var(--muted)">${i + 1}</td>
+          <td>${row.time}</td>
+          <td style="font-weight:600">${row.name}</td>
+          <td><span class="badge badge-${row.type}">${row.type}</span></td>
+          <td>${row.gate}</td>
+          <td><span class="badge badge-${row.action}">${row.action === 'in' ? '↓ IN' : '↑ OUT'}</span></td>
+          <td style="color:var(--muted)">${row.vehicle}</td>
+        </tr>
+      `).join('');
+    }
+
+    // ── Save pricing ──────────────────────────────────────────────────────────
+    function savePricing() {
+      const pricing = {
+        student: document.getElementById('price-student').value,
+        faculty: document.getElementById('price-faculty').value,
+        staff: document.getElementById('price-staff').value,
+        visitor: document.getElementById('price-visitor').value,
+        temp: document.getElementById('price-temp').value,
+      };
+      localStorage.setItem('bkuParkingPricing', JSON.stringify(pricing));
+      const btn = document.getElementById('save-price-btn');
+      btn.textContent = '✓ Saved!';
+      btn.classList.add('saved');
+      setTimeout(() => {
+        btn.textContent = 'Save Changes';
+        btn.classList.remove('saved');
+      }, 2000);
+    }
+
+    // ── Export CSV ────────────────────────────────────────────────────────────
+    function exportLog() {
+      const header = ['#', 'Time', 'Name', 'Type', 'Gate', 'Action', 'Vehicle'];
+      const rows = mockLogs.map((r, i) => [i + 1, r.time, r.name, r.type, r.gate, r.action, r.vehicle]);
+      const csv = [header, ...rows].map(r => r.join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'bku_parking_log.csv';
+      a.click();
+    }
+
+    // ── Scroll helper ─────────────────────────────────────────────────────────
+    function scrollToSection(id) {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ── Load saved pricing from localStorage ──────────────────────────────────
+    function loadPricing() {
+      try {
+        const saved = JSON.parse(localStorage.getItem('bkuParkingPricing') || '{}');
+        if (saved.student) document.getElementById('price-student').value = saved.student;
+        if (saved.faculty) document.getElementById('price-faculty').value = saved.faculty;
+        if (saved.staff) document.getElementById('price-staff').value = saved.staff;
+        if (saved.visitor) document.getElementById('price-visitor').value = saved.visitor;
+        if (saved.temp) document.getElementById('price-temp').value = saved.temp;
+      } catch {}
+    }
+
+    // ── Simulate live sensor updates ──────────────────────────────────────────
+    function simulateLive() {
+      setInterval(() => {
+        // Random slot change
+        const gates = ['gate1', 'gate2', 'gate3'];
+        const g = gates[Math.floor(Math.random() * 3)];
+        const delta = Math.random() > 0.5 ? 1 : -1;
+        const max = TOTAL_SLOTS[g];
+        mockSlots[g].occupied = Math.max(0, Math.min(max, mockSlots[g].occupied + delta));
+        renderStats();
+        renderSignage();
+      }, 4000);
+    }
+
+    // ── Init ──────────────────────────────────────────────────────────────────
+    renderStats();
+    renderSignage();
+    renderSensors();
+    renderLog();
+    loadPricing();
+    simulateLive();
+
+    // ── Tickets ───────────────────────────────────────────────────────────────
+    const TICKETS_KEY = 'bkuReportTickets';
+    const CAT_ICONS = { 'parking-spot':'🅿️', payment:'💳', access:'🚧', sensor:'📡', app:'📱', other:'💬' };
+
+    // Seed demo tickets if none exist
+    function seedDemoTickets() {
+      const existing = (() => { try { return JSON.parse(localStorage.getItem(TICKETS_KEY) || '[]'); } catch { return []; } })();
+      if (existing.length > 0) return;
+
+      const demos = [
+        {
+          id: 'TKT-A1B2C3',
+          category: 'payment',
+          priority: 'high',
+          name: 'Nguyen Van An',
+          studentId: '2110001',
+          email: 'an.nguyen@hcmut.edu.vn',
+          gate: 'Gate 1',
+          subject: 'Billed twice for semester 252',
+          description: 'I was charged twice for semester 252 parking fee. The first transaction on 03/05/2026 and a duplicate on 04/05/2026. Please check and refund the extra charge.',
+          status: 'in-progress',
+          createdAt: new Date(Date.now() - 2*24*3600*1000).toISOString(),
+          files: ['screenshot_bank.png'],
+          adminReply: 'We have received your report and are investigating with the payment team. We will update you within 2 business days.'
+        },
+        {
+          id: 'TKT-D4E5F6',
+          category: 'access',
+          priority: 'high',
+          name: 'Tran Thi Bich',
+          studentId: '2110045',
+          email: 'bich.tran@hcmut.edu.vn',
+          gate: 'Gate 3',
+          subject: 'Gate 3 barrier not lifting after valid scan',
+          description: 'The entry barrier at Gate 3 failed to open despite my parking card scanning successfully (green light shown). I had to wait 10 minutes for a guard to manually open it. This happened at 07:45 on 07/05/2026.',
+          status: 'open',
+          createdAt: new Date(Date.now() - 1*24*3600*1000).toISOString(),
+          files: [],
+          adminReply: null
+        },
+        {
+          id: 'TKT-G7H8I9',
+          category: 'sensor',
+          priority: 'medium',
+          name: 'Le Minh Khoa',
+          studentId: '2109876',
+          email: 'khoa.le@hcmut.edu.vn',
+          gate: 'Gate 2',
+          subject: 'Parking map shows wrong availability at Zone B',
+          description: 'The app/website map shows Zone B Gate 2 as "full" but when I arrived there were at least 8 empty slots. I believe the sensor data is incorrect. This has been happening for 2 days.',
+          status: 'resolved',
+          createdAt: new Date(Date.now() - 5*24*3600*1000).toISOString(),
+          files: ['photo_zone_b.jpg'],
+          adminReply: 'Sensor SNS-G2-02 was offline and has been reset. Availability data is now accurate. Thank you for reporting this!'
+        },
+        {
+          id: 'TKT-J1K2L3',
+          category: 'app',
+          priority: 'low',
+          name: 'Pham Quynh Nhu',
+          studentId: '2211234',
+          email: 'nhu.pham@hcmut.edu.vn',
+          gate: 'Not applicable',
+          subject: 'Language toggle does not save preference',
+          description: 'When I switch the website language to Vietnamese, it resets back to English every time I reload the page. Please make the language preference persist.',
+          status: 'closed',
+          createdAt: new Date(Date.now() - 10*24*3600*1000).toISOString(),
+          files: [],
+          adminReply: 'Language persistence has been added in the latest update (v20260508). Please clear your cache and try again.'
+        }
+      ];
+
+      localStorage.setItem(TICKETS_KEY, JSON.stringify(demos));
+    }
+
+    function loadAllTickets() {
+      try { return JSON.parse(localStorage.getItem(TICKETS_KEY) || '[]'); } catch { return []; }
+    }
+
+    function saveTickets(tickets) {
+      localStorage.setItem(TICKETS_KEY, JSON.stringify(tickets));
+    }
+
+    function renderAdminTickets() {
+      seedDemoTickets();
+      const filter = document.getElementById('ticket-filter').value;
+      let tickets = loadAllTickets();
+
+      // Update stats
+      const countBy = s => tickets.filter(t => t.status === s).length;
+      document.getElementById('tstat-open').textContent = countBy('open');
+      document.getElementById('tstat-inprog').textContent = countBy('in-progress');
+      document.getElementById('tstat-resolved').textContent = countBy('resolved');
+      document.getElementById('tstat-total').textContent = tickets.length;
+
+      // Update nav badge
+      const openCount = countBy('open');
+      const badge = document.getElementById('ticket-nav-badge');
+      if (openCount > 0) { badge.textContent = openCount; badge.style.display = ''; }
+      else badge.style.display = 'none';
+
+      if (filter) tickets = tickets.filter(t => t.status === filter);
+
+      const tbody = document.getElementById('ticket-table-body');
+      const empty = document.getElementById('ticket-empty');
+
+      if (!tickets.length) {
+        tbody.innerHTML = ''; empty.style.display = 'block'; return;
+      }
+      empty.style.display = 'none';
+
+      tbody.innerHTML = tickets.map(t => `
+        <tr>
+          <td style="font-family:monospace; font-size:0.78rem; color:var(--muted)">${t.id}</td>
+          <td>${CAT_ICONS[t.category] || '💬'} <span style="font-size:0.8rem">${t.category}</span></td>
+          <td style="max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600;">${escAdm(t.subject)}</td>
+          <td>
+            <div style="font-weight:600; font-size:0.85rem;">${escAdm(t.name)}</div>
+            <div style="font-size:0.75rem; color:var(--muted);">${escAdm(t.studentId)}</div>
+          </td>
+          <td style="font-size:0.82rem;">${escAdm(t.gate || '—')}</td>
+          <td><span class="priority-dot ${t.priority}"></span>${t.priority}</td>
+          <td><span class="t-badge ${t.status}">${t.status}</span></td>
+          <td style="font-size:0.78rem; color:var(--muted);">${fmtDate(t.createdAt)}</td>
+          <td><button class="action-btn" onclick="openTicketModal('${t.id}')">View</button></td>
+        </tr>
+      `).join('');
+    }
+
+    function openTicketModal(id) {
+      const tickets = loadAllTickets();
+      const t = tickets.find(x => x.id === id);
+      if (!t) return;
+
+      const prioColor = { low:'#16a34a', medium:'#d97706', high:'#dc2626' }[t.priority] || '#64748b';
+      const statusOptions = ['open','in-progress','resolved','closed'].map(s =>
+        `<option value="${s}" ${t.status === s ? 'selected' : ''}>${s}</option>`
+      ).join('');
+
+      document.getElementById('modal-content').innerHTML = `
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; flex-wrap:wrap; gap:8px;">
+          <div>
+            <div style="font-size:0.75rem; font-family:monospace; color:var(--muted); margin-bottom:2px;">${t.id}</div>
+            <h2 style="margin:0; font-size:1.1rem; font-weight:700;">${escAdm(t.subject)}</h2>
+          </div>
+          <span class="t-badge ${t.status}" style="font-size:0.82rem;">${t.status}</span>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0 16px;">
+          <div><div class="modal-label">Reporter</div><div class="modal-value">${escAdm(t.name)} <span style="color:var(--muted); font-size:0.82rem;">(${escAdm(t.studentId)})</span></div></div>
+          <div><div class="modal-label">Email</div><div class="modal-value">${escAdm(t.email)}</div></div>
+          <div><div class="modal-label">Category</div><div class="modal-value">${CAT_ICONS[t.category] || ''} ${t.category}</div></div>
+          <div><div class="modal-label">Gate</div><div class="modal-value">${escAdm(t.gate || '—')}</div></div>
+          <div><div class="modal-label">Priority</div><div class="modal-value" style="color:${prioColor}; font-weight:700;">⬤ ${t.priority}</div></div>
+          <div><div class="modal-label">Submitted</div><div class="modal-value">${fmtDate(t.createdAt)}</div></div>
+        </div>
+
+        <div class="modal-label" style="margin-top:4px;">Description</div>
+        <div class="modal-desc">${escAdm(t.description)}</div>
+
+        ${t.files && t.files.length ? `<div class="modal-label">Attachments</div><div class="modal-value">📎 ${t.files.join(', ')}</div>` : ''}
+
+        ${t.adminReply ? `<div class="modal-label">Previous Reply</div><div class="modal-desc" style="background:#f0fdf4; border-left:3px solid #16a34a;">${escAdm(t.adminReply)}</div>` : ''}
+
+        <div class="modal-label">Update Status</div>
+        <select id="modal-status" style="width:100%; box-sizing:border-box; margin-bottom:14px; border:1.5px solid var(--line); border-radius:8px; padding:8px 12px; font-size:0.88rem; outline:none;">${statusOptions}</select>
+
+        <div class="modal-label">Reply to User</div>
+        <textarea class="reply-textarea" id="modal-reply" placeholder="Type your reply here...">${escAdm(t.adminReply || '')}</textarea>
+
+        <div class="modal-actions">
+          <button class="modal-btn primary" onclick="saveTicketUpdate('${t.id}')">💾 Save & Reply</button>
+          <button class="modal-btn success" onclick="quickStatus('${t.id}','resolved')">✓ Resolve</button>
+          <button class="modal-btn warn" onclick="quickStatus('${t.id}','in-progress')">⏳ In Progress</button>
+          <button class="modal-btn ghost" onclick="closeModal()">Cancel</button>
+        </div>
+      `;
+
+      const modal = document.getElementById('ticket-modal');
+      modal.style.display = 'flex';
+    }
+
+    function saveTicketUpdate(id) {
+      const tickets = loadAllTickets();
+      const idx = tickets.findIndex(x => x.id === id);
+      if (idx === -1) return;
+      tickets[idx].status = document.getElementById('modal-status').value;
+      tickets[idx].adminReply = document.getElementById('modal-reply').value.trim() || null;
+      saveTickets(tickets);
+      closeModal();
+      renderAdminTickets();
+    }
+
+    function quickStatus(id, status) {
+      const tickets = loadAllTickets();
+      const idx = tickets.findIndex(x => x.id === id);
+      if (idx === -1) return;
+      tickets[idx].status = status;
+      saveTickets(tickets);
+      closeModal();
+      renderAdminTickets();
+    }
+
+    function closeModal() {
+      document.getElementById('ticket-modal').style.display = 'none';
+    }
+
+    document.getElementById('ticket-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    function exportTickets() {
+      const tickets = loadAllTickets();
+      const header = ['ID','Category','Subject','Name','StudentID','Email','Gate','Priority','Status','Date'];
+      const rows = tickets.map(t => [t.id, t.category, `"${t.subject}"`, t.name, t.studentId, t.email, t.gate, t.priority, t.status, fmtDate(t.createdAt)]);
+      const csv = [header, ...rows].map(r => r.join(',')).join('\n');
+      const blob = new Blob([csv], { type:'text/csv' });
+      const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'bku_tickets.csv'; a.click();
+    }
+
+    function escAdm(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function fmtDate(iso) {
+      const d = new Date(iso);
+      return d.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+    }
+
+    // Init tickets
+    renderAdminTickets();
+  </script>
+</body>
+</html>
